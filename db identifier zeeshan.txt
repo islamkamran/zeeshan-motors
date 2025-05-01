@@ -1,0 +1,18 @@
+DB Identifier Name:
+zeeshan-motors-db-identifier
+
+Master Username:
+zeeshan
+
+Master Password:
+zeeshanMotors
+
+
+Public Link From RDS:
+
+Actual DB Name:
+zeeshan_motors
+
+DB End Point:
+zeeshan-motors-db-identifier.cnk8mie60dp5.ap-southeast-2.rds.amazonaws.com
+

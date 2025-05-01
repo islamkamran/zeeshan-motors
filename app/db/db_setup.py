@@ -6,10 +6,10 @@ import os
 
 load_dotenv()  # Load environment variables from .env file
 
-PG_DATABASE_URI = os.getenv("DATABASE_URL_POSTGRES")
-print(f"the URI: {PG_DATABASE_URI}")
+SQL_DATABASE_URI = os.getenv("DATABASE_URL_MYSQL")
+print(f"the URI: {SQL_DATABASE_URI}")
 engine = create_engine(
-    PG_DATABASE_URI,
+    SQL_DATABASE_URI,
     # connect_args={"check_same_thread": True}
 )
 

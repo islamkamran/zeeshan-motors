@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
+from app.api import db_testing
 # from app.api.refresh_token import refresh_token
 from app.db.db_setup import Base, engine
 # from app.api.roles import role
@@ -71,7 +72,8 @@ async def main():
 
 
 # Routers Here
-# app.include_router(role.router)
+# DB Testing
+app.include_router(db_testing.router)
 
 
 
