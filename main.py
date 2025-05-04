@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from app.api import db_testing
+from app.api.users import signup
 from app.api.cms import zeeshan_cms
 # from app.api.refresh_token import refresh_token
 from app.db.db_setup import Base, engine
@@ -75,6 +76,7 @@ async def main():
 # Routers Here
 # DB Testing
 app.include_router(db_testing.router)
+app.include_router(signup.router)
 app.include_router(zeeshan_cms.router)
 
 

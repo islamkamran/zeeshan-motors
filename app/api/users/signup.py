@@ -14,12 +14,13 @@ from fastapi import APIRouter, Depends, HTTPException, Header, UploadFile, File,
 from app.helper.emails import send_user_details_to_admin,send_user_details_to_client
 import random
 import csv
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+# from reportlab.lib.pagesizes import letter
+# from reportlab.pdfgen import canvas
 from sqlalchemy.sql import func
 from sqlalchemy import and_
 from fastapi.responses import FileResponse
 import uuid
+from app.db.models import User as ModelUser
 
 
 UPLOAD_DIR = "uploads/profile/"  # Ensure this directory exists
@@ -31,7 +32,6 @@ router = APIRouter()
 
 @router.post("/v1/user/admin_signupuid")
 def signup(user_data: UidUserAdmin, db: Session = Depends(get_db)):
-    logging.info(f'Attempting to register user {user_data.email}')
         # make a random password for the user and a random user id
 
 
@@ -143,34 +143,6 @@ def signup(user_data: UidUser, db: Session = Depends(get_db)):
         print("user created")
         # when new user is created then check if user have opt for MFA or NOT
         if new_user:
-            if user_data.mfa_enabled == "yes":
-                logging.info('Enabling MFA for the new user')
-                
-                mfa_secret = enable_mfa_for_user(db, new_user)
-
-                send_app_notification(new_user.id, message = "Welcome to our service!")
-                
-                print("scan the image with authenticator app")
-
-                print(generate_mfa_qr_code(new_user.firstname, mfa_secret))
-
-                print("before the log activity")
-                log_activity(db, new_user.id, "signup", f"User {new_user.email} signed up.")
-
-                logging.info('User sucessfully added')
-                return {"msg": "User created successfully, MFA enabled", "mfa_secret": mfa_secret}
-        
-            logging.info(f'new user is created {new_user.firstname}')
-            print(f'"Message": "Register Successful, User: {new_user.firstname}')
-            
-            logging.info('User sucessfully added')
-
-            """send notification via app directly later configure how to deal with the preferences"""
-            send_app_notification(new_user.id, message = "Welcome to our service!")
-
-            # send_notification(db, new_user.id, "Welcome to our service!", "app")
-            print("before the log activity")
-            log_activity(db, new_user.id, "signup", f"User {new_user.email} signed up.") # this to be implemented in multiple parts of the project
             return {"Message": "Register Successful", "Message":"Account created successfully, waiting for Admin Approval"}
         else:
             raise HTTPException(status_code=400, detail="Registeration failed")
@@ -178,7 +150,7 @@ def signup(user_data: UidUser, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=409, detail="Error occured while registering, please try again")
     
-
+# ******************************************
 
 """Update signup"""
 @router.put("/v1/user/signup/{userid}")
