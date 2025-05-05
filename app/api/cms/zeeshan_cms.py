@@ -67,10 +67,10 @@ async def update_home_cms(
         print("START OK")
         # Save files if provided (simplified example)
         if fairImage:
-            data["fairImage"] = await save_upload_file(fairImage)
+            data["fairImage"] = await save_upload_file(fairImage, UPLOAD_DIR)
             print("OK")
         if dealImage:
-            data["dealImage"] = await save_upload_file(dealImage)
+            data["dealImage"] = await save_upload_file(dealImage, UPLOAD_DIR)
             print("OK OK")
 
         return update_cms_home(db, CMSHomeCreate(**data))
