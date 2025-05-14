@@ -316,6 +316,15 @@ class UidUser(BaseModel):
     class Config:
         orm_mode = True
         
+class PerformanceFeatureSchema(BaseModel):
+    desmodromic_engine_technology: Optional[bool] = None
+    fuel_injection: Optional[bool] = None
+    lightweight_design: Optional[bool] = None
+    high_performance_suspension: Optional[bool] = None
+
+    class Config:
+        orm_mode = True
+
 class PublishDataUid(UidUser):
     original_password: str = Field(None, min_length=6)
     password: str = Field(None, min_length=6)
@@ -464,5 +473,17 @@ class Roles(BaseModel):
     right_auction_management_edit: Optional[bool]= False
     right_auction_management_delete: Optional[bool]= False
 
+    class Config:
+        orm_mode = True
+    
+class VehImageSchema(BaseModel):
+    image: Optional[str] = None
+    fk_vehicle_id: Optional[int] = None
+    class Config:
+        orm_mode = True
+
+class VehVideoSchema(BaseModel):
+    video: Optional[str] = None
+    fk_vehicle_id: Optional[int] = None
     class Config:
         orm_mode = True

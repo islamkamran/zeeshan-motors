@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db.db_setup import get_db
 from app.helper.jwt_token import jwt_access_token
 from app.helper.jwt_token_decode import decode_token
-from app.helper.barcode_generator import generate_barcode_vehicle,generate_barcode_truck,generate_barcode_sparepart
+from app.helper.barcode_generator import generate_barcode_vehicle
 from app.helper.jwt_token import is_token_blacklisted
 from app.helper.image_name_maker import format_image_name
 import logging

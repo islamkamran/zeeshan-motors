@@ -61,6 +61,28 @@ def create_user_admin(db: Session, user_data):
     
     return new_user.id
 
+
+"""Registering new performancebike"""
+def register_performancebike(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_performancebike = PerformanceFeature(**comfort_data.dict())
+    new_performancebike.fk_vehicle_id = vehicle_id
+
+    db.add(new_performancebike)
+    db.commit()
+    db.refresh(new_performancebike)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new performance of Vehicle with ID: {vehicle_id} and new_performancebike: {new_performancebike.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_performancebike.id
+
 """******************SAME CREATE USER BUT FROM ADMINSIDE CREATING CUSTOMER**************"""
 def create_user_admin_customer(db: Session, user_data):
     try:
