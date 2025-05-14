@@ -139,7 +139,86 @@ class Vehicle(TimestampMixin, Base):
     sold_by = Column(String(55), nullable=True)
     uploaded_by = Column(String(55), nullable=True)
     
+class Sparepart(TimestampMixin, Base):
+    __tablename__ = "spareparts"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    fk_container_id = Column(Integer, ForeignKey("containers.id"), index=True, nullable=True)
+    fk_invoice_id = Column(Integer, ForeignKey("invoice.id"), index=True, nullable=True)
+    part_id = Column(String(55), nullable=True)
+    name = Column(String(55), nullable=True)
+    make = Column(String(55), nullable=True)
+    model = Column(String(55), nullable=True)
+    category = Column(String(55), nullable=True)
+    status = Column(String(55), nullable=True)
+    description = Column(String(255), nullable=True)
+    barcode = Column(String(50), nullable=True)
+    qrcode = Column(String(50), nullable=True)
+    condition_report = Column(String(255), nullable=True)  
+    price = Column(Float, nullable=True)
+    total_price = Column(Float, nullable=True, default=0.0) # New field
+    sold_price = Column(Float, nullable=True, default=0.0) # New field
+    recieved_amount = Column(Float, nullable=True, default=0.0) # New field
+    balance_amount = Column(Float, nullable=True, default=0.0) # New field
 
+    is_clear = Column(Boolean, default=False, nullable=True)
+    report_status = Column(String(20), nullable=True, default='draft')
+    feature = Column(String(55), nullable=True)
+    sold_by = Column(String(55), nullable=True)
+    uploaded_by = Column(String(55), nullable=True)
+    supplier = Column(String(55), nullable=True)
+
+
+"""*********TRUCKS*************"""
+class Truck(TimestampMixin, Base):
+    __tablename__ = "trucks"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    fk_container_id = Column(Integer, ForeignKey("containers.id"), index=True, nullable=True)
+    fk_invoice_id = Column(Integer, ForeignKey("invoice.id"), index=True, nullable=True)
+    body_type = Column(String(55), nullable=True)
+    drive_type = Column(String(55), nullable=True)
+    make = Column(String(55), nullable=True)
+    model = Column(String(55), nullable=True)
+    year = Column(String(55), nullable=True)
+    title = Column(String(55), nullable=True)
+    name = Column(String(55), nullable=True)
+    chassis_number = Column(String(55), nullable=True)
+    mileage = Column(String(55), nullable=True)
+    damage_details = Column(String(255), nullable=True)
+    transmission = Column(String(55), nullable=True)
+    clynder = Column(String(55), nullable=True)
+    location = Column(String(256), nullable=True)
+    color = Column(String(55), nullable=True)
+    fuel = Column(String(55), nullable=True)
+    engine = Column(String(55), nullable=True)
+    status = Column(String(55), nullable=True)
+    barcode = Column(String(50), nullable=True)
+    qrcode = Column(String(50), nullable=True)
+    description = Column(String(600), nullable=True)
+    grade = Column(String(55), nullable=True) # New field
+    score = Column(String(55), nullable=True) # New field
+    steer = Column(String(55), nullable=True) # New field
+    displacement = Column(String(55), nullable=True) # New field
+    total_price = Column(Float, nullable=True, default=0.0) # New field
+    sold_price = Column(Float, nullable=True, default=0.0) # New field
+    recieved_amount = Column(Float, nullable=True, default=0.0) # New field
+    balance_amount = Column(Float, nullable=True, default=0.0) # New field
+    auction_result = Column(String(55), nullable=True) # New field
+    condition = Column(String(255), nullable=True)  # New field for condition reporting
+    doors = Column(String(55), nullable=True)
+    engine_name = Column(String(55), nullable=True)
+    supplier = Column(String(55), nullable=True)
+    is_clear = Column(Boolean, default=False)  # New field to mark as "Clear"
+    report_status = Column(String(20), nullable=True, default='draft')  # Status: 'draft', 'confirmed'
+    feature = Column(String(55), nullable=True)
+    sold_by = Column(String(55), nullable=True)
+    uploaded_by = Column(String(55), nullable=True)
+
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+    
 
 class VehicleInterior(TimestampMixin, Base):
     __tablename__ = "interior"
@@ -158,6 +237,168 @@ class VehicleInterior(TimestampMixin, Base):
     climate_control = Column(Boolean, default=False)
     armrest_console = Column(Boolean, default=False)
     rear_seat_armrest_centre_console = Column(Boolean, default=False)
+
+class Videos(TimestampMixin, Base):
+    __tablename__ = "videos"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
+    # Store paths as a comma-separated string (e.g. "path1.mp4,path2.mp4")
+    video = Column(String(600), nullable=True)  # Make this long enough for multiple paths 
+
+class PerformanceFeature(TimestampMixin, Base):
+    __tablename__ = "performancefeatures"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=False) 
+    desmodromic_engine_technology = Column(Boolean, default=False)
+    fuel_injection = Column(Boolean, default=False)
+    lightweight_design = Column(Boolean, default=False)
+    high_performance_suspension = Column(Boolean, default=False)
+    
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class ComfortUsabilityFeatures(TimestampMixin, Base):
+    __tablename__ = "comfortusabilityfeatures"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=False) 
+    riding_ergonomics = Column(Boolean, default=False)
+    seat = Column(Boolean, default=False)
+    instrumentation = Column(Boolean, default=False)
+    fuel_capacity = Column(Boolean, default=False)
+    
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class SafetyFeatures(TimestampMixin, Base):
+    __tablename__ = "safetyfeatures"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=False) 
+    high_performance_brakes = Column(Boolean, default=False)
+    high_quality_tires = Column(Boolean, default=False)
+    
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class Prices(TimestampMixin, Base):
+    __tablename__ = "prices"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
+    fk_truck_id = Column(Integer, ForeignKey("trucks.id"), index=True, nullable=True)
+
+    unit_purchase_price = Column(Float, nullable=True, default=0.0)
+    auction_fee = Column(Float, nullable=True, default=0.0)
+    commission = Column(Float, nullable=True, default=0.0)
+    transportation_cost = Column(Float, nullable=True, default=0.0)
+    vanning = Column(Float, nullable=True, default=0.0)
+    drayage = Column(Float, nullable=True, default=0.0)
+    freight = Column(Float, nullable=True, default=0.0)
+    interest_charges = Column(Float, nullable=True, default=0.0)
+    handlinf_fees = Column(Float, nullable=True, default=0.0)
+    total_fob = Column(Float, nullable=True, default=0.0)
+    
+    # conversion rate from jpy to aed
+    conversion_rate = Column(Float, nullable=True, default=0.0)
+
+    do_delivery_order = Column(Float, nullable=True, default=0.0)
+    transport_expense = Column(Float, nullable=True, default=0.0)
+    dpa_charges = Column(Float, nullable=True, default=0.0)
+    service_charges = Column(Float, nullable=True, default=0.0)
+    bank_charges = Column(Float, nullable=True, default=0.0)
+    export_paper_cost = Column(Float, nullable=True, default=0.0)
+    local_cost_aed = Column(Float, nullable=True, default=0.0)
+    total_cnf = Column(Float, nullable=True, default=0.0)
+    yard_commission = Column(Float, nullable=True, default=0.0)
+    cost_till_yard = Column(Float, nullable=True, default=0.0)
+    other_amount = Column(Float, nullable=True, default=0.0)
+    
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+   
+
+class VehicleMake(TimestampMixin, Base):
+    __tablename__ = "vehiclemake"
+    id = Column(Integer, primary_key=True, index=True)
+    vehmake = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class VehicleModel(TimestampMixin, Base):
+    __tablename__ = "vehiclemodel"
+    id = Column(Integer, primary_key=True, index=True)
+    fk_vehmake_id = Column(Integer, ForeignKey('vehiclemake.id'), nullable=True, default=1)
+    vehmodel = Column(String(100), nullable=True)
+
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+class VehicleBodyType(TimestampMixin, Base):
+    __tablename__ = "vehiclebodytype"
+    id = Column(Integer, primary_key=True, index=True)
+    vehbodytype = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class VehicleTransmission(TimestampMixin, Base):
+    __tablename__ = "vehicletransmission"
+    id = Column(Integer, primary_key=True, index=True)
+    vehtransmission = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class VehicleColor(TimestampMixin, Base):
+    __tablename__ = "vehiclecolor"
+    id = Column(Integer, primary_key=True, index=True)
+    vehcolor = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+class BidWon(TimestampMixin, Base):
+    __tablename__ = "bidwon"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
+    bid_amount = Column(String(20), nullable=True)
+
+
+class VehicleDisplacement(TimestampMixin, Base):
+    __tablename__ = "vehicledisplacement"
+    id = Column(Integer, primary_key=True, index=True)
+    vehdisplacement = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class VehicleDriveType(TimestampMixin, Base):
+    __tablename__ = "vehicledrivetype"
+    id = Column(Integer, primary_key=True, index=True)
+    vehdrivetype = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class VehicleScore(TimestampMixin, Base):
+    __tablename__ = "vehiclescore"
+    id = Column(Integer, primary_key=True, index=True)
+    vehscore = Column(String(100), nullable=True)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+class ConvenienceFeatures(TimestampMixin, Base):
+    __tablename__ = "conveniencefeatures"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=False) 
+    lighting = Column(Boolean, default=False)
+    storage = Column(Boolean, default=False)
+    security = Column(Boolean, default=False)
+    adjustable_suspension = Column(Boolean, default=False)
+    
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
 
 class VehicleSafety(TimestampMixin, Base):
     __tablename__ = "safety"

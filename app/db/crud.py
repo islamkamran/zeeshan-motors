@@ -34,7 +34,7 @@ def update_cms_home(db: Session, cms_data: CMSHomeUpdate):
 """******************SAME CREATE USER BUT FROM ADMINSIDE**************"""
 def create_user_admin(db: Session, user_data):
     try:
-        new_user = User(**user_data.dict())
+        new_user =ModelUser(**user_data.dict())
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -124,6 +124,446 @@ def create_user(db: Session, user_data):
     
     return new_user
 
+"""Registering a new vehicle"""
+def register_vehicle(db: Session, user_id, vehicle_data):
+
+    new_vehicle = Vehicle(**vehicle_data.dict())
+    new_vehicle.fk_user_id = user_id
+    # print(f'the data in CRUD: {new_vehicle.__dict__}')
+    # # new_vehicle.fk_user_id = user_id
+    db.add(new_vehicle)
+    db.commit()
+    db.refresh(new_vehicle)
+    print(new_vehicle.id)
+
+    """Create a notification and store in Notification Table"""
+    notification = Notification(
+        fk_user_id=user_id, # in future remember this is user ID not vehicle but here is dummy example for now
+        message=f"{new_vehicle.name} has been added in Inventory by {new_vehicle.uploaded_by}",
+        read = False
+    )
+    db.add(notification)
+    db.commit()
+    print("notification created in Notification Table")
+    return new_vehicle.id
+
+"""Registering new interior"""
+def register_interior(db: Session, user_id, vehicle_id, interior_data):
+    # print(sparepart_data.name)
+    new_interior = VehicleInterior(**interior_data.dict())
+    new_interior.fk_vehicle_id = vehicle_id
+
+    db.add(new_interior)
+    db.commit()
+    db.refresh(new_interior)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new interior of Vehicle with ID: {vehicle_id} and Interior_id: {new_interior.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_interior.id
+
+"""Updating interior"""
+def upd_interior(db: Session, user_id, vehicle_id, interior_data):
+    # print(sparepart_data.name)
+    new_interior = VehicleInterior(**interior_data.dict())
+    new_interior.fk_vehicle_id = vehicle_id
+
+    db.commit()
+    db.refresh(new_interior)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new interior of Vehicle with ID: {vehicle_id} and Interior_id: {new_interior.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_interior.id
+
+"""Registering new safety"""
+def register_safety(db: Session, user_id, vehicle_id, safety_data):
+    # print(sparepart_data.name)
+    new_safety = VehicleSafety(**safety_data.dict())
+    new_safety.fk_vehicle_id = vehicle_id
+
+    db.add(new_safety)
+    db.commit()
+    db.refresh(new_safety)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new safety of Vehicle with ID: {vehicle_id} and Interior_id: {new_safety.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_safety.id
+
+"""updating safety"""
+def upd_safety(db: Session, user_id, vehicle_id, safety_data):
+    # print(sparepart_data.name)
+    new_safety = VehicleSafety(**safety_data.dict())
+    new_safety.fk_vehicle_id = vehicle_id
+
+    db.commit()
+    db.refresh(new_safety)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new safety of Vehicle with ID: {vehicle_id} and Interior_id: {new_safety.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_safety.id
+
+
+"""Registering new exterior"""
+def register_exterior(db: Session, user_id, vehicle_id, exterior_data):
+    # print(sparepart_data.name)
+    new_exterior = VehicleExterior(**exterior_data.dict())
+    new_exterior.fk_vehicle_id = vehicle_id
+
+    db.add(new_exterior)
+    db.commit()
+    db.refresh(new_exterior)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new exterior of Vehicle with ID: {vehicle_id} and exterior_id: {new_exterior.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_exterior.id
+
+
+"""updating exterior"""
+def upd_exterior(db: Session, user_id, vehicle_id, exterior_data):
+    # print(sparepart_data.name)
+    new_exterior = VehicleExterior(**exterior_data.dict())
+    new_exterior.fk_vehicle_id = vehicle_id
+
+    db.commit()
+    db.refresh(new_exterior)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new exterior of Vehicle with ID: {vehicle_id} and exterior_id: {new_exterior.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_exterior.id
+
+"""Registering new Comfort"""
+def register_comfort(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_comfort = VehicleComfortConvenience(**comfort_data.dict())
+    new_comfort.fk_vehicle_id = vehicle_id
+
+    db.add(new_comfort)
+    db.commit()
+    db.refresh(new_comfort)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new comfort and convenience of Vehicle with ID: {vehicle_id} and comfort_id: {new_comfort.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_comfort.id
+
+"""Registering new safetyfeatures"""
+def register_safetyfeatures(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_safetyfeatures = SafetyFeatures(**comfort_data.dict())
+    new_safetyfeatures.fk_vehicle_id = vehicle_id
+ 
+    db.add(new_safetyfeatures)
+    db.commit()
+    db.refresh(new_safetyfeatures)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new performance of Vehicle with ID: {vehicle_id} and new_safetyfeatures: {new_safetyfeatures.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_safetyfeatures.id
+
+
+"""Registering new comfortusabilitybike"""
+def register_comfortusability(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_comfortusability = ComfortUsabilityFeatures(**comfort_data.dict())
+    new_comfortusability.fk_vehicle_id = vehicle_id
+ 
+    db.add(new_comfortusability)
+    db.commit()
+    db.refresh(new_comfortusability)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new performance of Vehicle with ID: {vehicle_id} and new_comfortusability: {new_comfortusability.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_comfortusability.id
+
+
+"""Registering new safetyfeatures"""
+def register_safetyfeatures(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_safetyfeatures = SafetyFeatures(**comfort_data.dict())
+    new_safetyfeatures.fk_vehicle_id = vehicle_id
+ 
+    db.add(new_safetyfeatures)
+    db.commit()
+    db.refresh(new_safetyfeatures)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new performance of Vehicle with ID: {vehicle_id} and new_safetyfeatures: {new_safetyfeatures.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_safetyfeatures.id
+
+
+
+def create_make(db: Session, data):
+    new_make = VehicleMake(**data.dict())
+    db.add(new_make)
+    db.commit()
+    db.refresh(new_make)
+    return new_make.id
+
+def create_model(db: Session, data):
+    new_model = VehicleModel(**data.dict())
+    db.add(new_model)
+    db.commit()
+    db.refresh(new_model)
+    return new_model.id
+
+def create_body(db: Session, data):
+    new_body = VehicleBodyType(**data.dict())
+    db.add(new_body)
+    db.commit()
+    db.refresh(new_body)
+    return new_body.id
+
+
+def create_trans(db: Session, data):
+    new_trans = VehicleTransmission(**data.dict())
+    db.add(new_trans)
+    db.commit()
+    db.refresh(new_trans)
+    return new_trans.id
+
+def create_clr(db: Session, data):
+    new_color = VehicleColor(**data.dict())
+    db.add(new_color)
+    db.commit()
+    db.refresh(new_color)
+    return new_color.id
+
+def create_drtype(db: Session, data):
+    new_drtype = VehicleDriveType(**data.dict())
+    db.add(new_drtype)
+    db.commit()
+    db.refresh(new_drtype)
+    return new_drtype.id
+
+def create_disp(db: Session, data):
+    new_displacement = VehicleDisplacement(**data.dict())
+    db.add(new_displacement)
+    db.commit()
+    db.refresh(new_displacement)
+    return new_displacement.id
+
+
+def create_scr(db: Session, data):
+    new_score = VehicleScore(**data.dict())
+    db.add(new_score)
+    db.commit()
+    db.refresh(new_score)
+    return new_score.id
+
+"""Registering new conveniencefeatures"""
+def register_conveniencefeatures(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_conveniencefeatures = ConvenienceFeatures(**comfort_data.dict())
+    new_conveniencefeatures.fk_vehicle_id = vehicle_id
+ 
+    db.add(new_conveniencefeatures)
+    db.commit()
+    db.refresh(new_conveniencefeatures)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new performance of Vehicle with ID: {vehicle_id} and new_conveniencefeatures: {new_conveniencefeatures.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_conveniencefeatures.id
+
+
+"""Registering new conveniencefeatures"""
+def register_conveniencefeatures(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_conveniencefeatures = ConvenienceFeatures(**comfort_data.dict())
+    new_conveniencefeatures.fk_vehicle_id = vehicle_id
+ 
+    db.add(new_conveniencefeatures)
+    db.commit()
+    db.refresh(new_conveniencefeatures)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new performance of Vehicle with ID: {vehicle_id} and new_conveniencefeatures: {new_conveniencefeatures.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_conveniencefeatures.id
+
+
+"""updating Comfort"""
+def upd_comfort(db: Session, user_id, vehicle_id, comfort_data):
+    # print(sparepart_data.name)
+    new_comfort = VehicleComfortConvenience(**comfort_data.dict())
+    new_comfort.fk_vehicle_id = vehicle_id
+
+    db.commit()
+    db.refresh(new_comfort)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new comfort and convenience of Vehicle with ID: {vehicle_id} and comfort_id: {new_comfort.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_comfort.id
+
+"""Registering new dimension"""
+def register_dimension(db: Session, user_id, vehicle_id, dimension_data):
+    # print(sparepart_data.name)
+    new_dimension = DimensionCapicity(**dimension_data.dict())
+    new_dimension.fk_vehicle_id = vehicle_id
+
+    db.add(new_dimension)
+    db.commit()
+    db.refresh(new_dimension)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new dimension of Vehicle with ID: {vehicle_id} and comfort_id: {new_dimension.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_dimension.id
+
+"""updating dimension"""
+def upd_dimension(db: Session, user_id, vehicle_id, dimension_data):
+    # print(sparepart_data.name)
+    new_dimension = DimensionCapicity(**dimension_data.dict())
+    new_dimension.fk_vehicle_id = vehicle_id
+
+    db.commit()
+    db.refresh(new_dimension)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new dimension of Vehicle with ID: {vehicle_id} and comfort_id: {new_dimension.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_dimension.id
+
+"""Registering new engine"""
+def register_engine(db: Session, user_id, vehicle_id, engine_data):
+    # print(sparepart_data.name)
+    new_engine = EngineTransmisison(**engine_data.dict())
+    new_engine.fk_vehicle_id = vehicle_id
+
+    db.add(new_engine)
+    db.commit()
+    db.refresh(new_engine)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new engine of Vehicle with ID: {vehicle_id} and comfort_id: {new_engine.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_engine.id
+
+
+"""updating engine"""
+def upd_engine(db: Session, user_id, vehicle_id, engine_data):
+    # print(sparepart_data.name)
+    new_engine = EngineTransmisison(**engine_data.dict())
+    new_engine.fk_vehicle_id = vehicle_id
+
+    db.commit()
+    db.refresh(new_engine)
+
+    # """Create a notification and store in Notification Table"""
+    # notification = Notification(
+    #     fk_user_id=user_id, # in future remember this is user ID not sparepart but here is dummy example for now
+    #     message=f"A new engine of Vehicle with ID: {vehicle_id} and comfort_id: {new_engine.id} is registered",
+    #     read = False
+    # )
+    # db.add(notification)
+    # db.commit()
+    # print("here 2 notification created in Notification Table")
+    return new_engine.id
 
 
 # About Us CRUD
