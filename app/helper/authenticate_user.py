@@ -1,9 +1,7 @@
 from fastapi import HTTPException
 from passlib.context import CryptContext
 from app.helper.jwt_token import jwt_access_token, jwt_refresh_token
-import logging
 import json
-from app.security_logs import log_security_event
 from sqlalchemy.orm import Session
 from app.db.models import Role
 from sqlalchemy.orm import Session
@@ -24,8 +22,6 @@ def autheticate_user(db: Session,user_record, user_data):
     try:
         # remember the sequence of decrypting of matters !!!!!!!!
         if not verify_password(user_data.password, user_record.password):
-            logging.error('Error occured in authenticating the credentials of the user')
-            # log_security_event("User login attempt failed for user: john_doe")
             raise HTTPException(status_code=400, detail="Wrong password/ email")
         
         # The reason behind this is if a user dont have rights of rights are missing by anymean the if condition will not allow the retval json so that is why we need an empty condition
@@ -153,15 +149,11 @@ def autheticate_user(db: Session,user_record, user_data):
                 "right_auction_management_delete":rights.right_auction_management_delete
             })
 
-        # Checking if MFA is enabled then we will have come login via the Verify MFA
         if user_record.mfa_enabled == "yes":
             # If MFA is enabled, return a response indicating that MFA verification is needed
-            logging.info('MFA is enabled, prompting for MFA code')
             return {"mfa_required": True, "user_id": user_record.id}
         
 
-        logging.debug('making the token and refresh token')
         return {"access_token": jwt_access_token(retval), "token_type": "bearer", "refresh_token": jwt_refresh_token(retval)}
     except Exception as e:
-        logging.error('Error occured in authenticate_user')
         return {"error": str(e)}

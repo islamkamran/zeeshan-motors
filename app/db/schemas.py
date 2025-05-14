@@ -1,6 +1,25 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
 
+class User(BaseModel):
+    firstname: str = Field(None, min_length=3, max_length=50)
+    lastname: str = Field(None, min_length=3, max_length=50)
+    email: str = Field(None, max_length=255)
+    phonenumber: str = Field(None, max_length=15)
+    password: str = Field(None, min_length=6)
+    role: str = Field(None, max_length=20)
+    status: bool
+    side: str = Field(None, max_length=20)
+    terms_agreement: str = Field(None, max_length=20)
+    mfa_enabled: str
+
+    class Config:
+        orm_mode = True 
+
+class Signin(BaseModel):
+    email: str = Field(max_length=150)
+    password: str = Field(min_length=6)
+
 class CMSHomeBase(BaseModel):
     heroTitle: str
     mediaItems: List[Dict]
@@ -38,6 +57,11 @@ class UidUserAdmin(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class SigninUid(BaseModel):
+    uid: str = Field(max_length=150)
+    password: str = Field(min_length=6)
 
 
 
@@ -171,3 +195,36 @@ class CMSContactBase(BaseModel):
 
 class CMSContactResponse(CMSContactBase):
     id: int
+
+
+class Roles(BaseModel):
+    name: Optional[str] = None
+    right_read: Optional[bool]= False
+    right_write: Optional[bool]= False
+    right_edit: Optional[bool]= False
+    right_delete: Optional[bool]= False
+    right_dashboard: Optional[bool]= False
+    right_container: Optional[bool]= False
+    right_product: Optional[bool]= False
+    right_employee_management: Optional[bool]= False
+    right_reports: Optional[bool]= False
+    right_invoices: Optional[bool]= False
+    right_setting: Optional[bool]= False
+    right_help_center: Optional[bool]= False
+    right_feed_back: Optional[bool]= False
+    right_status_permission: Optional[bool]= False
+    right_generate: Optional[bool]= False
+    right_overseas_employee: Optional[bool]= False
+    right_customer_management: Optional[bool]= False
+    right_customer_management_read: Optional[bool]= False
+    right_customer_management_write: Optional[bool]= False
+    right_customer_management_edit: Optional[bool]= False
+    right_customer_management_delete: Optional[bool]= False
+    right_auction_management: Optional[bool]= False
+    right_auction_management_read: Optional[bool]= False
+    right_auction_management_write: Optional[bool]= False
+    right_auction_management_edit: Optional[bool]= False
+    right_auction_management_delete: Optional[bool]= False
+
+    class Config:
+        orm_mode = True

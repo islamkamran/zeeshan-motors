@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from app.db.models import *
+from app.db.models import User as ModelUser
 from app.db.schemas import *
 from app.helper.emails import send_user_details_to_admin,send_user_details_to_client,send_user_details_to_user
-import logging
 
 
 
@@ -38,11 +38,9 @@ def create_user_admin(db: Session, user_data):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-        logging.info(f'new user registered in DB with the id: {new_user.id}')
         print("user added")
     except Exception as e:
         db.rollback()  # Rollback in case of error
-        logging.error(f"Error during database operation: {e}")
         raise
         
 
@@ -70,11 +68,9 @@ def create_user_admin_customer(db: Session, user_data):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-        logging.info(f'new user registered in DB with the id: {new_user.id}')
         print("user added")
     except Exception as e:
         db.rollback()  # Rollback in case of error
-        logging.error(f"Error during database operation: {e}")
         raise
         
 
@@ -102,11 +98,9 @@ def create_user(db: Session, user_data):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-        logging.info(f'new user registered in DB with the id: {new_user.id}')
         print("user added")
     except Exception as e:
         db.rollback()  # Rollback in case of error
-        logging.error(f"Error during database operation: {e}")
         raise
         
 
@@ -195,3 +189,16 @@ def update_contact(db: Session, data: dict):
     db.commit()
     db.refresh(contact)
     return contact
+
+
+def get_user_by_credentials(db: Session, email: str):
+    user_record = db.query(ModelUser).filter(ModelUser.email == email).first()
+    print(user_record)
+    print("in get user by credentail function")
+    return user_record
+
+def get_user_by_credentials_uid(db: Session, uid: str):
+    user_record = db.query(ModelUser).filter(ModelUser.uid == uid).first()
+    print(user_record)
+    print("in get user by credentail function")
+    return user_record
