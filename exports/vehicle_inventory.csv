@@ -1,0 +1,5 @@
+id,make,model,year,title,name,chassis_number,mileage,damage_details,transmission,clynder,location,color,fuel,engine,status,grade,score,steer,displacement,condition,doors,engine_name,supplier,is_clear,report_status,created_at
+3,BNW,S-class,2024,bmw excelent class,yaris,ncp58-0030818,1000000,not-any,5,4,UAE,black,Diesel,1299,Instock,2.0,A,LHV,200.0,old,2,,janjapan,True,draft,2025-05-14 13:23:22
+4,,,2023,test,test,NCP55-0059649899,"4,000 km",damage,,5 Cylinder,"Big Star used cars and spare parts, Industrial Area 3 - Industrial Area - Sharjah - United Arab Emirates",,Electric,abc,Intransit,UL,,RightHand,,New,3,g412,Awais ,True,ok,2025-05-15 06:20:29
+5,,,2023,test,test,NCP55-12345,"4,000 km",damage,,5 Cylinder,"Big Star used cars and spare parts, Industrial Area 3 - Industrial Area - Sharjah - United Arab Emirates",,Electric,abc,Intransit,UL,,RightHand,,New,3,g412,Awais ,True,ok,2025-05-15 06:24:28
+6,,,2023,test,test,NCP55-12345678,"4,000 km",damage,,5 Cylinder,"Big Star used cars and spare parts, Industrial Area 3 - Industrial Area - Sharjah - United Arab Emirates",,Electric,abc,Intransit,UL,,RightHand,,New,3,g412,Awais ,True,ok,2025-05-15 06:25:30
