@@ -487,3 +487,35 @@ class VehVideoSchema(BaseModel):
     fk_vehicle_id: Optional[int] = None
     class Config:
         orm_mode = True
+
+class PricingData(BaseModel):
+    # fk_vehicle_id: Optional[int]
+    unit_purchase_price: Optional[float] = 0.0
+    auction_fee: Optional[float] = 0.0
+    commission: Optional[float] = 0.0
+    transportation_cost: Optional[float] = 0.0
+    vanning: Optional[float] = 0.0
+    drayage: Optional[float] = 0.0
+    freight: Optional[float] = 0.0
+    interest_charges: Optional[float] = 0.0
+    handlinf_fees: Optional[float] = 0.0
+    total_fob: Optional[float] = 0.0
+    
+    # conversion rate of jpy to aed
+    conversion_rate: Optional[float] = 0.0
+
+    do_delivery_order: Optional[float] = 0.0
+    transport_expense: Optional[float] = 0.0
+    dpa_charges: Optional[float] = 0.0
+    service_charges: Optional[float] = 0.0
+    bank_charges: Optional[float] = 0.0
+    export_paper_cost: Optional[float] = 0.0
+    local_cost_aed: Optional[float] = 0.0
+    total_cnf: Optional[float] = 0.0
+    yard_commission: Optional[float] = 0.0
+    cost_till_yard: Optional[float] = 0.0
+    other_amount: Optional[float] = 0.0
+
+    class Config:
+        orm_mode = True
+    

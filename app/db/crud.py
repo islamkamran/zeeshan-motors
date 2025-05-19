@@ -83,6 +83,15 @@ def register_performancebike(db: Session, user_id, vehicle_id, comfort_data):
     # print("here 2 notification created in Notification Table")
     return new_performancebike.id
 
+def register_price(db: Session, veh_id, price_data):
+    new_price = Prices(**price_data.dict())
+    new_price.fk_vehicle_id = veh_id
+    db.add(new_price)
+    db.commit()
+    db.refresh(new_price)
+    print(new_price.id)
+    return new_price.id
+
 """******************SAME CREATE USER BUT FROM ADMINSIDE CREATING CUSTOMER**************"""
 def create_user_admin_customer(db: Session, user_data):
     try:
