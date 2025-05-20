@@ -673,3 +673,26 @@ def get_user_by_credentials_uid(db: Session, uid: str):
     print(user_record)
     print("in get user by credentail function")
     return user_record
+
+
+def create_container(db: Session,user_id, firstname, container):
+    db_container = Container(**container.dict())
+    db.add(db_container)
+    db.commit()
+    db.refresh(db_container)
+    """Create a notification and store in Notification Table"""
+    notification = Notification(
+        fk_user_id=user_id, # in future remember this is user ID not vehicle but here is dummy example for now
+        message=f"New Container has been added with Container id: {db_container.id} by {firstname}.",
+        read = False
+    )
+    db.add(notification)
+    db.commit()
+    db.refresh(notification)
+    print("notification created in Notification Table")
+    return db_container.id
+
+
+def get_all_containers(db: Session):
+    return db.query(Container).all()
+

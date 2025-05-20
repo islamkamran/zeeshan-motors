@@ -121,7 +121,7 @@ class UpdateVehicleStatus(BaseModel):
 
 class UpdateVehiclePartsStatusContainer(BaseModel):
     chassis_no: Optional[str] = None
-    part_id: Optional[str] = None
+    # part_id: Optional[str] = None
     status: str  # Required to change to 'instock'
 
 class UpdateContainerStatus(BaseModel):
@@ -518,4 +518,106 @@ class PricingData(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class   ContainerBase(BaseModel):
+    shipper: Optional[str] = None
+    shipping_company: Optional[str] = None
+    bl_number: Optional[str] = None
+    container_number: Optional[str] = None
+    seal_number: Optional[str] = None
+    gross_weight: Optional[str] = None
+    port_of_discharge: Optional[str] = None
+    port_of_loading: Optional[str] = None
+    no_of_units: Optional[str] = None
+    status: Optional[str] = None
+    description: Optional[str] = None
+    eta: Optional[str] = None
+
+
+class ContainerCreate(ContainerBase):
+    pass
+
+class ContainerUpdate(ContainerBase):
+    pass
+
+class Container(ContainerBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class ContImageSchema(BaseModel):
+    image: Optional[str] = None
+    fk_container_id: Optional[int] = None
+    class Config:
+        orm_mode = True
+
+class ContainerLocation(BaseModel):
+    id: int
+    current_latitude: float
+    current_longitude: float
+    tracking_status: str
+
+    class Config:
+        orm_mode = True
+
+
+class BLNumber(BaseModel):
+    bl_number: Optional[str] = None
+
+class Contblnumber(BaseModel):
+    bl_number: Optional[str] = None
+
+class MonthSearch(BaseModel):
+    month: Optional[str] = None
+
+
+class Cont_blnumber(BaseModel):
+    item: Optional[str] = None
+
+
+class ContQuarter(BaseModel):
+    quarter: Optional[str] = None
     
+
+class MonthInput(BaseModel):
+    month: str  # Example: "June"
+    year: int   # Example: 2024
+
+
+class   ContainerBase(BaseModel):
+    shipper: Optional[str] = None
+    shipping_company: Optional[str] = None
+    bl_number: Optional[str] = None
+    container_number: Optional[str] = None
+    seal_number: Optional[str] = None
+    gross_weight: Optional[str] = None
+    port_of_discharge: Optional[str] = None
+    port_of_loading: Optional[str] = None
+    no_of_units: Optional[str] = None
+    status: Optional[str] = None
+    description: Optional[str] = None
+    eta: Optional[str] = None
+
+
+class ContainerCreate(ContainerBase):
+    pass
+
+class ContainerUpdate(ContainerBase):
+    pass
+
+class Container(ContainerBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class ContainerStatus(BaseModel):
+    status: Optional[str] = None
+
+
+class ContainerLocationUpdate(BaseModel):
+    current_latitude: float
+    current_longitude: float
+    tracking_status: str
