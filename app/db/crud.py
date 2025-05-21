@@ -675,22 +675,45 @@ def get_user_by_credentials_uid(db: Session, uid: str):
     return user_record
 
 
-def create_container(db: Session,user_id, firstname, container):
-    db_container = Container(**container.dict())
-    db.add(db_container)
-    db.commit()
-    db.refresh(db_container)
-    """Create a notification and store in Notification Table"""
-    notification = Notification(
-        fk_user_id=user_id, # in future remember this is user ID not vehicle but here is dummy example for now
-        message=f"New Container has been added with Container id: {db_container.id} by {firstname}.",
-        read = False
-    )
-    db.add(notification)
-    db.commit()
-    db.refresh(notification)
-    print("notification created in Notification Table")
-    return db_container.id
+def create_ccontainer(db: Session, user_id: int, firstname: str, container: ContainerCreate) -> int:
+    try:
+        print("Creating container with data:", container.dict())
+        
+        # Create SQLAlchemy model instance
+        db_container = Container(
+            shipper=container.shipper,
+            shipping_company=container.shipping_company,
+            bl_number=container.bl_number,
+            container_number=container.container_number,
+            seal_number=container.seal_number,
+            gross_weight=container.gross_weight,
+            port_of_discharge=container.port_of_discharge,
+            port_of_loading=container.port_of_loading,
+            no_of_units=container.no_of_units,
+            status=container.status,
+            description=container.description,
+            eta=container.eta
+        )
+
+        db.add(db_container)
+        db.commit()
+        db.refresh(db_container)
+
+        # Create notification
+        notification = Notification(
+            fk_user_id=user_id,
+            message=f"New Container added: ID {db_container.id} by {firstname}",
+            read=False
+        )
+        db.add(notification)
+        db.commit()
+
+        return db_container.id
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error creating container: {str(e)}")
+        raise
 
 
 def get_all_containers(db: Session):

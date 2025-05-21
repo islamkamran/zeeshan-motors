@@ -541,7 +541,7 @@ class ContainerCreate(ContainerBase):
 class ContainerUpdate(ContainerBase):
     pass
 
-class Container(ContainerBase):
+class ContainerSchema(ContainerBase):
     id: int
 
     class Config:
@@ -586,7 +586,7 @@ class MonthInput(BaseModel):
     year: int   # Example: 2024
 
 
-class   ContainerBase(BaseModel):
+class ContainerBase(BaseModel):
     shipper: Optional[str] = None
     shipping_company: Optional[str] = None
     bl_number: Optional[str] = None
@@ -600,6 +600,8 @@ class   ContainerBase(BaseModel):
     description: Optional[str] = None
     eta: Optional[str] = None
 
+    class Config:
+        from_attributes = True  # or extra = "ignore" if using Pydantic v1
 
 class ContainerCreate(ContainerBase):
     pass
@@ -607,11 +609,6 @@ class ContainerCreate(ContainerBase):
 class ContainerUpdate(ContainerBase):
     pass
 
-class Container(ContainerBase):
-    id: int
-
-    class Config:
-        orm_mode = True
 
 class ContainerStatus(BaseModel):
     status: Optional[str] = None
@@ -621,3 +618,55 @@ class ContainerLocationUpdate(BaseModel):
     current_latitude: float
     current_longitude: float
     tracking_status: str
+
+
+class CustomerCreate(BaseModel):
+    name: str
+    phone_number: str
+    email: Optional[str] = None  # Optional field for email
+
+    class Config:
+        orm_mode = True
+
+
+class ItemCreate(BaseModel):
+    transaction_id: int
+    customer_id: int
+    item_type: str
+    item_name: str
+    chassis_number: Optional[str] = None
+    quantity: int = Field(default=1)
+    notes: Optional[str] = None
+    offer_price: Optional[float] = None
+    status: str = Field(default="Reserved")
+    category: Optional[str] = Field(default="Other")
+    
+    class Config:
+        orm_mode = True
+
+
+class TransactionCreate(BaseModel):
+    customer_id: int
+    item_id: int
+    
+    class Config:
+        orm_mode = True
+
+class StatusUpdate(BaseModel):
+    new_status: str  # e.g., Reserved -> Sold
+
+    class Config:
+        orm_mode = True
+
+class SearchQuery(BaseModel):
+    query_to_search: str
+
+    class Config:
+        orm_mode = True
+
+class SearchPrice(BaseModel):
+    min_price: float = 0, 
+    max_price: float = float("inf")
+    class Config:
+        orm_mode = True
+

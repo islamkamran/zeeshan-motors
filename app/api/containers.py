@@ -37,22 +37,26 @@ router = APIRouter()
 @router.post("/v1/container")
 def containers_creation(shipper: str = Form(None), shipping_company: str = Form(None), bl_number: str = Form(None), container_number: str = Form(None), seal_number: str = Form(None), gross_weight: str = Form(None), port_of_discharge: str = Form(None), port_of_loading: str = Form(None), no_of_units: str = Form(None), status: str = Form(None), description: str = Form(None), eta: str = Form(None),  image: list[UploadFile] = File(None), vehicles: str = Form(None), authorization: str = Header(None), db: Session = Depends(get_db)):
     try:
+        print(1)
         bind = db.get_bind()
         if bind is None:
             raise HTTPException(status_code=500, detail="Database session is nout bound to an engine")
         if authorization is None:
             raise HTTPException(status_code=401, detail="Unauthorized")
+        print(2)
         token = authorization.split(" ")[1] if authorization.startswith("Bearer ") else authorization
         if is_token_blacklisted(token) == True:
             return {'Message': 'Session Expired please Login'}
 
         # we have return both the id and the complete data the only purpose is incase of refresh token we need all data in normal case we only need the id as foreign key
         user_id, retval = decode_token(token)  # Extracting the user_id as it would be used as foreign Key in the rollout table
-        print(f"user id: {user_id}")
+        print(3)
+        print(f"*********user id: {user_id}***********")
 
         user_data = db.query(User).filter(User.id == user_id).first()
         if user_data is None:
             raise HTTPException(status_code=404, detail="User Not Found")
+        print(4)
 
         if bl_number is not None:
             check_container = db.query(Container).filter(Container.bl_number == bl_number).first()
@@ -60,10 +64,12 @@ def containers_creation(shipper: str = Form(None), shipping_company: str = Form(
                 raise HTTPException(status_code=409, detail="Container with this BL number is already registered")
         container_data = ContainerCreate(shipper=shipper, shipping_company=shipping_company, bl_number=bl_number, container_number=container_number,seal_number=seal_number,gross_weight=gross_weight,port_of_discharge=port_of_discharge, port_of_loading=port_of_loading, no_of_units = no_of_units, status=status, description=description, eta=eta)
         container_data = container_data.dict()
-        container_id = create_container(db,user_id, user_data.firstname, ContainerCreate(**container_data))
+        container_id = create_ccontainer(db,user_id, user_data.firstname, ContainerCreate(**container_data))
+        print(5)
 
         """storing images and videos"""
         image_paths = []
+        print(6)
 
         # Save image files to the uploads directory
         if image is not None:
@@ -86,6 +92,7 @@ def containers_creation(shipper: str = Form(None), shipping_company: str = Form(
             db.add(cont_images)
             db.commit()
             db.refresh(cont_images)
+        print(7)
 
         """************************************vehicles******************************************"""
         # adding the container number to the vehicles
@@ -98,16 +105,31 @@ def containers_creation(shipper: str = Form(None), shipping_company: str = Form(
 
         # update the vehicles with the given chassis number with the respective container id
         for veh in vehicles_data:
+            # Access each detail of the vehicle
             chassis_number = veh.get("chassis_number")
+            # make = veh.get("make")
+            # model = veh.get("model")
+            # year = veh.get("year")
+            # color = veh.get("color")
+
+            # Log the chassis number for debugging
             print(f"Processing vehicle with chassis number: {chassis_number}")
+
+            # Example: Update the vehicle's container number based on chassis_number
             existing_vehicle = db.query(Vehicle).filter(Vehicle.chassis_number == chassis_number).first()
             if existing_vehicle is None:
-                print(f"No vehicle found with chassis number: {chassis_number}")
+                existing_vehicle = db.query(Truck).filter(Truck.chassis_number == chassis_number).first()
             if existing_vehicle:
-                existing_vehicle.fk_container_id = container_id 
+                # Update container details or any other fields
+                existing_vehicle.fk_container_id = container_id # assuming `container_number` is available
                 db.commit()
                 db.refresh(existing_vehicle)
                 print(f"Updated container number for vehicle {chassis_number}")
+
+            else:
+                print(f"No vehicle/ Truck found with chassis number: {chassis_number}")
+
+        print(9)
 
         retval = {
             "container_id": container_id
@@ -115,6 +137,7 @@ def containers_creation(shipper: str = Form(None), shipping_company: str = Form(
         return {"data": retval}
 
     except Exception as e:
+        print(10)
         print(traceback.format_exc())
         raise HTTPException(status_code=409, detail=f' Error: {str(e)}')
 

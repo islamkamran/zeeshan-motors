@@ -2,6 +2,7 @@ from app.db.db_setup import Base
 from sqlalchemy import (
     Float, Column, ForeignKey, Integer, String, DateTime, func, Boolean, Enum, JSON, Text
 )
+from sqlalchemy.orm import relationship 
 
 
 class TimestampMixin:
@@ -587,3 +588,72 @@ class Role(TimestampMixin, Base):
     right_auction_management_delete = Column(Boolean, default=False)
     
     created_by = Column(String(255), index=True, nullable=True)
+
+"""Customers Tables"""
+
+class Customer(TimestampMixin, Base):
+    __tablename__ = 'customers'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    phone_number = Column(String(20), nullable=False)
+    email = Column(String(255), nullable=True)
+    
+class AuctionBigStar(TimestampMixin, Base):
+    __tablename__ = "auctionsbigstar"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    auction_name = Column(String(55), nullable=True) 
+    auction_location = Column(String(55), nullable=True)
+    auction_status = Column(Boolean, default=False)
+
+class CustomerAuctionBids(TimestampMixin, Base):
+    __tablename__ = "customerauctionsbids"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_customer_id = Column(Integer, ForeignKey("customerauction.id"), index=True, nullable=True)
+    fk_auctionbigstar_id = Column(Integer, ForeignKey("auctionsbigstar.id"), index=True, nullable=True)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    fk_truck_id = Column(Integer, ForeignKey("trucks.id"), index=True, nullable=True)
+    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
+    bid_amount = Column(Float, nullable=False)
+
+    # Relationship with CustomerAuction
+    customer = relationship("CustomerAuction", back_populates="bids")
+
+class Item(TimestampMixin, Base):
+    __tablename__ = 'itemss'
+
+    id = Column(Integer, primary_key=True, index=True)
+    # transaction_id = Column(Integer, ForeignKey('transactionss.id'), index=True, nullable=False)
+    customer_id = Column(Integer, ForeignKey('customers.id'), index=True, nullable=False)
+
+    item_type = Column(String(55), nullable=False)
+    item_name = Column(String(255), nullable=False)
+    chassis_number = Column(String(55), nullable=True)
+    quantity = Column(Integer, nullable=False, default=1)
+    notes = Column(String(255), nullable=True)
+    offer_price = Column(Float, nullable=True)
+    status = Column(String(55), nullable=False, default="Reserved")
+    category = Column(String(55), nullable=False, default="Other")
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
+class CustomerAuction(TimestampMixin, Base):
+    __tablename__ = 'customerauction'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50), nullable=False)
+    phone_number = Column(String(20), nullable=False)
+
+    # Relationship with CustomerAuctionBids
+    bids = relationship("CustomerAuctionBids", back_populates="customer")
+
+
+class Transaction(TimestampMixin, Base):
+    __tablename__ = 'transactionss'
+
+    id = Column(Integer, primary_key=True, index=True)
+    customer_id = Column(Integer, ForeignKey('customers.id'), index=True, nullable=False)
+    item_id = Column(Integer, ForeignKey('itemss.id'), index=True, nullable=False)
+    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+
