@@ -214,3 +214,6 @@ def generate_invoice(veh_id: int, db: Session = Depends(get_db)):
 
     # Return the PDF file as a downloadable response
     return FileResponse(path=pdf_filename, filename=pdf_filename, media_type='application/pdf')
+
+
+

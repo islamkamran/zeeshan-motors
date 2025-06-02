@@ -140,86 +140,6 @@ class Vehicle(TimestampMixin, Base):
     sold_by = Column(String(55), nullable=True)
     uploaded_by = Column(String(55), nullable=True)
     
-class Sparepart(TimestampMixin, Base):
-    __tablename__ = "spareparts"
-    id = Column(Integer, primary_key=True, index=True, nullable=False)
-    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
-    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
-    fk_container_id = Column(Integer, ForeignKey("containers.id"), index=True, nullable=True)
-    fk_invoice_id = Column(Integer, ForeignKey("invoice.id"), index=True, nullable=True)
-    part_id = Column(String(55), nullable=True)
-    name = Column(String(55), nullable=True)
-    make = Column(String(55), nullable=True)
-    model = Column(String(55), nullable=True)
-    category = Column(String(55), nullable=True)
-    status = Column(String(55), nullable=True)
-    description = Column(String(255), nullable=True)
-    barcode = Column(String(50), nullable=True)
-    qrcode = Column(String(50), nullable=True)
-    condition_report = Column(String(255), nullable=True)  
-    price = Column(Float, nullable=True)
-    total_price = Column(Float, nullable=True, default=0.0) # New field
-    sold_price = Column(Float, nullable=True, default=0.0) # New field
-    recieved_amount = Column(Float, nullable=True, default=0.0) # New field
-    balance_amount = Column(Float, nullable=True, default=0.0) # New field
-
-    is_clear = Column(Boolean, default=False, nullable=True)
-    report_status = Column(String(20), nullable=True, default='draft')
-    feature = Column(String(55), nullable=True)
-    sold_by = Column(String(55), nullable=True)
-    uploaded_by = Column(String(55), nullable=True)
-    supplier = Column(String(55), nullable=True)
-
-
-"""*********TRUCKS*************"""
-class Truck(TimestampMixin, Base):
-    __tablename__ = "trucks"
-    id = Column(Integer, primary_key=True, index=True, nullable=False)
-    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
-    fk_container_id = Column(Integer, ForeignKey("containers.id"), index=True, nullable=True)
-    fk_invoice_id = Column(Integer, ForeignKey("invoice.id"), index=True, nullable=True)
-    body_type = Column(String(55), nullable=True)
-    drive_type = Column(String(55), nullable=True)
-    make = Column(String(55), nullable=True)
-    model = Column(String(55), nullable=True)
-    year = Column(String(55), nullable=True)
-    title = Column(String(55), nullable=True)
-    name = Column(String(55), nullable=True)
-    chassis_number = Column(String(55), nullable=True)
-    mileage = Column(String(55), nullable=True)
-    damage_details = Column(String(255), nullable=True)
-    transmission = Column(String(55), nullable=True)
-    clynder = Column(String(55), nullable=True)
-    location = Column(String(256), nullable=True)
-    color = Column(String(55), nullable=True)
-    fuel = Column(String(55), nullable=True)
-    engine = Column(String(55), nullable=True)
-    status = Column(String(55), nullable=True)
-    barcode = Column(String(50), nullable=True)
-    qrcode = Column(String(50), nullable=True)
-    description = Column(String(600), nullable=True)
-    grade = Column(String(55), nullable=True) # New field
-    score = Column(String(55), nullable=True) # New field
-    steer = Column(String(55), nullable=True) # New field
-    displacement = Column(String(55), nullable=True) # New field
-    total_price = Column(Float, nullable=True, default=0.0) # New field
-    sold_price = Column(Float, nullable=True, default=0.0) # New field
-    recieved_amount = Column(Float, nullable=True, default=0.0) # New field
-    balance_amount = Column(Float, nullable=True, default=0.0) # New field
-    auction_result = Column(String(55), nullable=True) # New field
-    condition = Column(String(255), nullable=True)  # New field for condition reporting
-    doors = Column(String(55), nullable=True)
-    engine_name = Column(String(55), nullable=True)
-    supplier = Column(String(55), nullable=True)
-    is_clear = Column(Boolean, default=False)  # New field to mark as "Clear"
-    report_status = Column(String(20), nullable=True, default='draft')  # Status: 'draft', 'confirmed'
-    feature = Column(String(55), nullable=True)
-    sold_by = Column(String(55), nullable=True)
-    uploaded_by = Column(String(55), nullable=True)
-
-    # created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
-    
 
 class VehicleInterior(TimestampMixin, Base):
     __tablename__ = "interior"
@@ -243,7 +163,6 @@ class Videos(TimestampMixin, Base):
     __tablename__ = "videos"
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
-    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
     # Store paths as a comma-separated string (e.g. "path1.mp4,path2.mp4")
     video = Column(String(600), nullable=True)  # Make this long enough for multiple paths 
 
@@ -285,8 +204,6 @@ class Prices(TimestampMixin, Base):
     __tablename__ = "prices"
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
-    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
-    fk_truck_id = Column(Integer, ForeignKey("trucks.id"), index=True, nullable=True)
 
     unit_purchase_price = Column(Float, nullable=True, default=0.0)
     auction_fee = Column(Float, nullable=True, default=0.0)
@@ -362,7 +279,6 @@ class BidWon(TimestampMixin, Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
     fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
-    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
     bid_amount = Column(String(20), nullable=True)
 
 
@@ -598,7 +514,20 @@ class Customer(TimestampMixin, Base):
     name = Column(String(255), nullable=False)
     phone_number = Column(String(20), nullable=False)
     email = Column(String(255), nullable=True)
-    
+
+class Auction(TimestampMixin, Base):
+    __tablename__ = "auctions"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    auction_type = Column(String(50), nullable=True) 
+    start_time = Column(String(55), nullable=True)
+    end_time = Column(String(55), nullable=True)
+    starting_bid = Column(String(55), nullable=True)
+    initial_bid_amount = Column(Float, nullable=True)
+    winning_bid = Column(Integer, nullable=True)
+    winner_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    auction_house_name = Column(String(55), nullable=True) # New field
+    auction_date = Column(String(55), nullable=True) 
+
 class AuctionBigStar(TimestampMixin, Base):
     __tablename__ = "auctionsbigstar"
     id = Column(Integer, primary_key=True, index=True, nullable=False)
@@ -612,8 +541,6 @@ class CustomerAuctionBids(TimestampMixin, Base):
     fk_customer_id = Column(Integer, ForeignKey("customerauction.id"), index=True, nullable=True)
     fk_auctionbigstar_id = Column(Integer, ForeignKey("auctionsbigstar.id"), index=True, nullable=True)
     fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
-    fk_truck_id = Column(Integer, ForeignKey("trucks.id"), index=True, nullable=True)
-    fk_part_id = Column(Integer, ForeignKey("spareparts.id"), index=True, nullable=True)
     bid_amount = Column(Float, nullable=False)
 
     # Relationship with CustomerAuction
@@ -657,3 +584,16 @@ class Transaction(TimestampMixin, Base):
     # created_at = Column(DateTime, server_default=func.now(), nullable=False)
     # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
+
+class Purchase(TimestampMixin, Base):
+    __tablename__ = "purchases"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    fk_auction_id = Column(Integer, ForeignKey("auctions.id"), index=True, nullable=True)
+
+    pruchase_date = Column(String(55), nullable=True)
+    supplier_name = Column(String(255), nullable=True)
+    purchase_location = Column(String(255), nullable=True)
+    amount = Column(Float, nullable=True)
+    status = Column(String(55), nullable=False) 

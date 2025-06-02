@@ -112,7 +112,6 @@ class EngineTrans(BaseModel):
 
 class UpdateVehicleStatus(BaseModel):
     chassis_no: Optional[str] = None
-    part_id: Optional[str] = None
     status: str  # Required to change from 'instock' to 'outstock'
     sold_price: Optional[float] = None
     recieved_amount: Optional[float] = None
@@ -121,7 +120,6 @@ class UpdateVehicleStatus(BaseModel):
 
 class UpdateVehiclePartsStatusContainer(BaseModel):
     chassis_no: Optional[str] = None
-    # part_id: Optional[str] = None
     status: str  # Required to change to 'instock'
 
 class UpdateContainerStatus(BaseModel):
@@ -670,3 +668,37 @@ class SearchPrice(BaseModel):
     class Config:
         orm_mode = True
 
+
+class CustomerSearch(BaseModel):
+    username: Optional[str] = None
+    phonenumber: Optional[str] = None
+    vehicle_name: Optional[str] = None
+    chassis_number: Optional[str] = None
+    user_id: Optional[int] = None
+    vehicle_id: Optional[int] = None
+
+    
+class ContactDetail(BaseModel):
+    contact: Optional[str] = None
+
+class VehicleBidPlacing(BaseModel):
+    chassis_number: str
+    make: str
+    model: str
+    name: str
+    bid_amount: str
+
+
+
+class UidCustomerBidAdmin(BaseModel):
+    # Customer Adding
+    firstname: str = Field(None, min_length=3, max_length=50)
+    lastname: str = Field(None, min_length=3, max_length=50)
+    email: Optional[str] = None
+    phonenumber: str = Field(None, max_length=15)
+    role: str = Field(None, max_length=20)
+    status: bool
+    auction_id: Optional[int] = None
+    emirates_id: Optional[str] = None
+    address: Optional[str] = None
+    vehicles: List[VehicleBidPlacing] = None
