@@ -68,28 +68,31 @@ def signup(user_data: UidUserAdmin, db: Session = Depends(get_db)):
 """***********register customer from admin portal"""
 @router.post("/v1/user/admin_signupuid_customer")
 def signup(user_data: UidCustomerAdmin, db: Session = Depends(get_db)):
-    logging.info(f'Attempting to register user {user_data.email}')
-    print(f'Email is: {user_data.email}')
+    print(1)
     if not user_data.email:
         user_data.email = None 
         # make a random password for the user and a random user id
     print(f'Email is: {user_data.email}')
+    print(2)
 
     # Generate a random 8-digit password
     def generate_password():
         return ''.join(random.choices('0123456789', k=6))
     # Generate a unique UID for each user
+    print(3)
+    
     def generate_uid():
         return ''.join(random.choices('0123456789', k=8))
     # Adjusted code
+    print(4)
+
     original_password = generate_password()  # Generate random password
     hashed_password = hashedpassword(original_password)  # Hash the password
     uid = generate_uid()            # Generate unique UID
-    logging.info('hashed password is called a seperate helper funtion to create hashed password')
     # password = hashedpassword(password)
-    print("here 1")
+    print(5)
     data_adding_DB = user_data.model_dump()
-    print("here 2")
+    print(6)
     data_adding_DB["side"] = "client"
     data_adding_DB["terms_agreement"] = "Yes"
     data_adding_DB["original_password"] = original_password
@@ -98,9 +101,11 @@ def signup(user_data: UidCustomerAdmin, db: Session = Depends(get_db)):
     data_adding_DB["mfa_enabled"] = "no"
     data_adding_DB["mfa_secret"] = "none"
     print(data_adding_DB)
-    print("data adding DB")
+    print("7")
     
     new_user = create_user_admin_customer(db, PublishDataUidCustomerAdmin(**data_adding_DB))
+    print(12)
+
     print("user created")
     return {"Message": "Register Successful for User", "id": new_user}
 

@@ -95,11 +95,15 @@ def register_price(db: Session, veh_id, price_data):
 """******************SAME CREATE USER BUT FROM ADMINSIDE CREATING CUSTOMER**************"""
 def create_user_admin_customer(db: Session, user_data):
     try:
-        new_user = User(**user_data.dict())
+        print(8)
+
+        new_user = ModelUser(**user_data.dict())
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
         print("user added")
+        print(9)
+
     except Exception as e:
         db.rollback()  # Rollback in case of error
         raise
@@ -114,11 +118,14 @@ def create_user_admin_customer(db: Session, user_data):
     db.add(notification)
     db.commit()
     print("notification created in Notification Table")
+    print(10)
+
     
     print("Sending Email IGNORING FOR NOW to User regarding registration")
     # send_user_details_to_client(new_user.firstname, new_user.lastname, new_user.email,new_user.uid,new_user.original_password, new_user.role)
     # send_user_details_to_admin(new_user.id,new_user.firstname, new_user.lastname, new_user.email, new_user.role)
     print("Email Sent")
+    print(11)
     
     return new_user.id
 
