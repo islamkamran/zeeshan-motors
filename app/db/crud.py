@@ -3,6 +3,9 @@ from app.db.models import *
 from app.db.models import User as ModelUser
 from app.db.schemas import *
 from app.helper.emails import send_user_details_to_admin,send_user_details_to_client,send_user_details_to_user
+from sqlalchemy import text
+from fastapi import APIRouter, HTTPException, Depends, Form, status
+
 
 
 
@@ -726,3 +729,72 @@ def create_ccontainer(db: Session, user_id: int, firstname: str, container: Cont
 def get_all_containers(db: Session):
     return db.query(Container).all()
 
+
+
+"""**************************DELETING DATA OF USER*********************"""
+def delete_a_user_record(item_id, db: Session):
+    try:
+        # Disable foreign key checks
+        print(1)
+        db.execute(text("SET FOREIGN_KEY_CHECKS = 0"))
+        print("foreign key disabled")
+        print(2)
+
+        employee = db.query(ModelUser).filter(ModelUser.id == item_id).first()
+        print(employee)
+        if employee is None:
+            raise HTTPException(status_code=404, detail="User Not Found")
+        store_name = employee.firstname
+        print(3)
+        print(item_id)
+        result = db.query(ModelUser).filter(ModelUser.id == item_id).delete()
+        print(result)
+        if result == 0:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"item with id {item_id} not found"
+            )
+        print(4)
+        
+        notification = Notification(
+        fk_user_id=None,
+        message=f'{store_name} has been deleted by Admin.',
+        read = False
+        )
+        db.add(notification)
+        db.commit()
+        db.refresh(notification)
+        # db.commit()
+        print(5)
+
+        # Re-enable foreign key checks
+        db.execute(text("SET FOREIGN_KEY_CHECKS = 1"))
+        print("foreign key enabled")
+        db.commit()
+        return
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting data: {str(e)}"
+        )
+    
+
+def create_role(db: Session,user_id, created_by, data):
+    new_role = Role(**data.dict())
+    new_role.created_by = created_by
+    db.add(new_role)
+    db.commit()
+    db.refresh(new_role)
+
+    """Create a notification and store in Notification Table"""
+    notification = Notification(
+        fk_user_id=user_id,
+        message=f'A new role "{new_role.name}" has been created by {created_by}',
+        read = False
+    )
+    db.add(notification)
+    db.commit()
+    db.refresh(notification)
+    print(f'the id: {new_role.name}')
+    return new_role.name

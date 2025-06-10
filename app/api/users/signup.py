@@ -607,3 +607,98 @@ def export_vehicles_inventory_csv(data: CustomerReports, db: Session = Depends(g
             c.save()
             # Return file as a download
             return FileResponse(file_path, filename="customer_report.pdf", media_type="application/pdf")
+
+
+"""*****All Signup list Crud**************"""
+@router.get("/v1/all_signups")
+def vehicles(db: Session = Depends(get_db)):
+    signups = db.query(ModelUser).filter(ModelUser.side=="admin").all()
+    if not signups:
+        raise HTTPException(status_code=404, detail="No Signups Found")
+    
+    retval = [
+        {
+            "id": signup.id,
+            "firstname": signup.firstname,
+            "lastname": signup.lastname,
+            "email": signup.email,
+            "uid": signup.uid,
+            "phonenumber": signup.phonenumber,
+            "role": signup.role,
+            "status": signup.status,
+            "side": signup.side,
+            "terms_agreement": signup.terms_agreement,
+            "mfa_enabled": signup.mfa_enabled,
+            "mfa_secret": signup.mfa_secret,
+            "created_on": signup.created_at,
+            "emirates_id":signup.emirates_id,
+            "address":signup.address
+        }
+        for signup in signups
+    ]
+    
+    retval = {
+        "data": retval
+    }
+    return retval
+
+@router.get("/v1/all_signups_customer")
+def vehicles(db: Session = Depends(get_db)):
+    signups = db.query(ModelUser).filter(ModelUser.side=="client").all()
+    if not signups:
+        raise HTTPException(status_code=404, detail="No Signups Found")
+    
+    retval = [
+        {
+            "id": signup.id,
+            "firstname": signup.firstname,
+            "lastname": signup.lastname,
+            "email": signup.email,
+            "uid": signup.uid,
+            "phonenumber": signup.phonenumber,
+            "role": signup.role,
+            "status": signup.status,
+            "side": signup.side,
+            "terms_agreement": signup.terms_agreement,
+            "mfa_enabled": signup.mfa_enabled,
+            "mfa_secret": signup.mfa_secret,
+            "created_on": signup.created_at,
+            "emirates_id":signup.emirates_id,
+            "address":signup.address
+        }
+        for signup in signups
+    ]
+    
+    retval = {
+        "data": retval
+    }
+    return retval
+
+"""*****Signup by ID**************"""
+@router.get("/v1/all_signups/{signup_id}")
+def vehicles(signup_id:int, db: Session = Depends(get_db)):
+    signup = db.query(ModelUser).filter(ModelUser.id==signup_id).first()
+    if not signup:
+        raise HTTPException(status_code=404, detail="No Signup Found")
+    
+    retval = {
+            "id": signup.id,
+            "firstname": signup.firstname,
+            "lastname": signup.lastname,
+            "email": signup.email,
+            "uid": signup.uid,
+            "phonenumber": signup.phonenumber,
+            "role": signup.role,
+            "status": signup.status,
+            "side": signup.side,
+            "terms_agreement": signup.terms_agreement,
+            "mfa_enabled": signup.mfa_enabled,
+            "mfa_secret": signup.mfa_secret,
+            "emirates_id":signup.emirates_id,
+            "address":signup.address
+        }
+    
+    retval = {
+        "data": retval
+    }
+    return retval

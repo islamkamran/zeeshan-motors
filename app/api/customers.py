@@ -1,5 +1,5 @@
 import traceback
-from fastapi import APIRouter, HTTPException, Depends, Form
+from fastapi import APIRouter, HTTPException, Depends, Form, status
 from sqlalchemy.orm import Session
 from app.db.db_setup import get_db
 from app.db.schemas import *
@@ -15,6 +15,8 @@ from sqlalchemy import and_
 from fastapi.responses import FileResponse
 import os
 from app.helper.password_hashing import hashedpassword
+from sqlalchemy import text
+
 
 
 UPLOAD_DIR = "uploads/profile/"  # Ensure this directory exists
@@ -52,25 +54,15 @@ def create_customer(customer_id: int, customer: CustomerCreate, db: Session = De
     except Exception as e:
         return str(e)
 
-@router.delete("/v1/customers/{customer_id}")
-def delete_customer(customer_id: int, db: Session = Depends(get_db)):
-    try:
-        existing_customer = db.query(Customer).filter(Customer.id == customer_id).first()
 
-        if not existing_customer:
-            raise HTTPException(status_code=404, detail=f"Customer with ID {customer_id} not found")
-
-        # Delete the customer
-        db.delete(existing_customer)
-        db.commit()
-
-        return {"detail": f"Customer with ID {customer_id} deleted successfully"}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal server error")
-
-
+# Truncate multiple tables for MySQL (use accordingly)
+@router.delete("/v1/customers/{item_id}")
+def delete_user_mysql(item_id:int, db: Session = Depends(get_db)):
+    delete_a_user_record(item_id, db)
+    return {"message": "deleted successfully"}
 @router.get("/v1/customers")
+
+
 def get_customer(db: Session = Depends(get_db)):
     try:
         customers = db.query(Customer).all()

@@ -473,7 +473,10 @@ class Roles(BaseModel):
 
     class Config:
         orm_mode = True
-    
+
+class RoleName(BaseModel):
+    name: Optional[str] = None
+
 class VehImageSchema(BaseModel):
     image: Optional[str] = None
     fk_vehicle_id: Optional[int] = None
