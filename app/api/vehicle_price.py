@@ -192,28 +192,6 @@ def create_invoice(veh_id: int, price_data, vehicle_data):
 
     return pdf_filename
 
-# Endpoint to generate and download the invoice PDF
-@router.get("/v1/generate_invoice/{veh_id}")
-def generate_invoice(veh_id: int, db: Session = Depends(get_db)):
-    # Fetch vehicle data from the database
-    vehicle_data = db.query(Vehicle).filter(Vehicle.id == veh_id).first()
-
-    if vehicle_data is None:
-        raise HTTPException(status_code=404, detail="Vehicle not found")
-    
-    price_data = db.query(Prices).filter(Prices.fk_vehicle_id==veh_id).first()
-    if price_data is None:
-        raise HTTPException(status_code=404, detail="Price not found")    
-
-    # Create the invoice PDF
-    pdf_filename = create_invoice(veh_id, price_data, vehicle_data)
-
-    # Check if the PDF file was generated and exists
-    if not os.path.exists(pdf_filename):
-        raise HTTPException(status_code=500, detail="Failed to generate invoice PDF")
-
-    # Return the PDF file as a downloadable response
-    return FileResponse(path=pdf_filename, filename=pdf_filename, media_type='application/pdf')
 
 
 

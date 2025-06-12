@@ -2172,7 +2172,7 @@ def get_chassis_list(db: Session = Depends(get_db)):
             "chassis_number": chassis_detail.chassis_number,
             "created_at": chassis_detail.created_at,
             "updated_at": chassis_detail.updated_at,
-            "type": "vehicle/bike"
+            "type": "vehicle"
         }
         for chassis_detail in chassis_details
     ]

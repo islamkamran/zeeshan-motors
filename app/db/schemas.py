@@ -586,6 +586,17 @@ class MonthInput(BaseModel):
     month: str  # Example: "June"
     year: int   # Example: 2024
 
+class InvoiceData(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    cell_number: Optional[str] = None
+    whatsapp_number: Optional[str] = None
+    email_address: Optional[str] = None
+    address: Optional[str] = None
+    vat: Optional[str] = None
+    tax: Optional[float]
+    sub_total: Optional[float]
+    total: Optional[float]
 
 class ContainerBase(BaseModel):
     shipper: Optional[str] = None
