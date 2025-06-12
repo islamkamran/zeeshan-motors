@@ -725,3 +725,7 @@ class PendingAmountAdding(BaseModel):
     class Config:
         orm_mode = True
 
+class ChangeAdminPassword(BaseModel):
+    current_password: str
+    password: str
+    confirm_password: str

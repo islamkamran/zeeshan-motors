@@ -702,3 +702,35 @@ def vehicles(signup_id:int, db: Session = Depends(get_db)):
         "data": retval
     }
     return retval
+
+
+"""CHANGE PASSWORD"""
+@router.put("/v1/change_admin_password")
+def reset_password(data: ChangeAdminPassword, authorization: str = Header(None), db: Session = Depends(get_db)):
+    if authorization is None:
+        logging.error('The token entered for the user is either wrong or expired')
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    token = authorization.split(" ")[1] if authorization.startswith("Bearer ") else authorization
+    if is_token_blacklisted(token) == True:
+        return {'Message': 'Session Expired please Login'}
+    user_id, retval = decode_token(token)  # Extracting the user_id as it would be used as foreign Key
+    logging.info(f'the user id after decoding: {user_id}')
+    print(user_id)
+
+    user_profile = db.query(ModelUser).filter(ModelUser.id==user_id).first()
+    print(user_profile.firstname)
+    if user_profile is None:
+        raise HTTPException(status_code=404, detail="User Not Found")
+    
+    if data.password != data.confirm_password:
+        return {"data":"Password do not match"}
+
+    # Hash and update the new password
+    user_profile.original_password = data.confirm_password
+    data.password = hashedpassword(data.password)
+    user_profile.password = data.password
+    
+    db.commit()
+    db.refresh(user_profile)
+
+    return {"message": "Password has been changed successfully"}
