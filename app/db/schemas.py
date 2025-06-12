@@ -716,3 +716,12 @@ class UidCustomerBidAdmin(BaseModel):
     emirates_id: Optional[str] = None
     address: Optional[str] = None
     vehicles: List[VehicleBidPlacing] = None
+
+class PendingAmountAdding(BaseModel):
+    type: str
+    chassis_no: str
+    part_id: str
+
+    class Config:
+        orm_mode = True
+

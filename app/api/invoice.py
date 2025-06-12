@@ -250,3 +250,18 @@ def generate_invoice(veh_id: int, db: Session = Depends(get_db)):
 
     # Return the PDF file as a downloadable response
     return FileResponse(path=pdf_filename, filename=pdf_filename, media_type='application/pdf')
+
+
+@router.post("/v1/pending_amount_adding")
+def balanceamount(data: PendingAmountAdding, db: Session = Depends(get_db)):
+    if data.type == "vehicle":
+        check_veh = db.query(Vehicle).filter(Vehicle.chassis_number == data.chassis_no).first()
+        if check_veh is None:
+            raise HTTPException(status_code=404, detail="No Vehicle with this chassis is avaliable in inventory")
+        
+        check_veh.recieved_amount = check_veh.sold_price
+        check_veh.balance_amount = 0.0
+        db.commit()
+        db.refresh(check_veh)
+    
+    return {"message":"Balance Amount Recieved"}
