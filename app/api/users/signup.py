@@ -734,3 +734,8 @@ def reset_password(data: ChangeAdminPassword, authorization: str = Header(None),
     db.refresh(user_profile)
 
     return {"message": "Password has been changed successfully"}
+
+@router.delete("/v1/delete_user/{item_id}")
+def delete_user_mysql(item_id:int, db: Session = Depends(get_db)):
+    delete_a_user_record(item_id, db)
+    return {"message": "deleted successfully"}
