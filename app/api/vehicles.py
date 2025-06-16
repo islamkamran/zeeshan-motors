@@ -23,6 +23,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from sqlalchemy.sql import func
 from sqlalchemy import and_
+from datetime import datetime
 
 EXPORT_DIR = "exports/"  # Directory to save the file
 UPLOAD_DIR = "uploads/vehicles/"  # Ensure this directory exists
