@@ -23,6 +23,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from sqlalchemy.sql import func
 from sqlalchemy import and_
+import requests
 from datetime import datetime
 
 EXPORT_DIR = "exports/"  # Directory to save the file
@@ -2467,3 +2468,39 @@ def update_vehicle_status(update_data: UpdateVehiclePartsStatusContainer, db: Se
     return {
         "status": data.status
     }
+
+
+
+"""****************Google Reviews****************"""
+# Your Google API key
+GOOGLE_API_KEY = "AIzaSyB7snqxODPiRVEvFChFwdTOGTbh_j_AWpI"
+
+@router.get("/v1/get_google_reviews")
+def get_business_reviews(db: Session = Depends(get_db)):
+    """
+    Fetch reviews for the given Place ID.
+    """
+    place_id = "ChIJHeWEid9nXz4R4zb0hhzhtJU"
+    url = "https://maps.googleapis.com/maps/api/place/details/json"
+    params = {
+        "place_id": place_id,
+        "fields": "name,rating,review",
+        "key": GOOGLE_API_KEY
+    }
+
+    headers = {
+        "Content-Type": "application/json",  # Explicitly specify JSON content type
+    }
+
+    response = requests.get(url, params=params, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        # print("hello")
+        # print(data)
+        if "result" in data and "reviews" in data["result"]:
+            reviews = data["result"]["reviews"]
+            return {"business_name": data["result"]["name"], "reviews": reviews}
+        else:
+            raise HTTPException(status_code=404, detail="No reviews found for this Place ID.")
+    else:
+        raise HTTPException(status_code=response.status_code, detail="Failed to fetch reviews from Google.")
