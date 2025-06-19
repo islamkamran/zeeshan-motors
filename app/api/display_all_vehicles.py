@@ -145,5 +145,4 @@ def disp_vehicles( request: Request,authorization: str = Header(None),db: Sessio
         return {'data': vehicles}
 
     except Exception as e:
-        logging.error(f'Error occured in display_vehicle api; {str(e)}')
         return str(e)
