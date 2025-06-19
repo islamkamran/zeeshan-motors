@@ -54,7 +54,7 @@ origins = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:8080",
-    "http://ec2-54-252-183-45.ap-southeast-2.compute.amazonaws.com:3000",
+    "http://ec2-13-210-175-115.ap-southeast-2.compute.amazonaws.com:4001",
 ]
 
 
