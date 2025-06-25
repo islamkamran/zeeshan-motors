@@ -16,6 +16,32 @@ class User(BaseModel):
     class Config:
         orm_mode = True 
 
+class FeedbackCreate(BaseModel):
+    rating: int
+    comment: str
+    class Config:
+        orm_mode = True
+
+class FeedbackClientSchema(BaseModel):
+    title: str
+    description: str
+    class Config:
+        orm_mode = True
+
+
+class MessageData(BaseModel):
+    name: str
+    email: str
+    message: str
+
+class SubscriptionData(BaseModel):
+    email: str
+
+
+class SearchInventories(BaseModel):
+    search_query: Optional[str] = None
+
+
 class VehInterior(BaseModel):
     air_conditioner: Optional[bool] = None
     digital_odometer: Optional[bool] = None

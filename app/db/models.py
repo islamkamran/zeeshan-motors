@@ -54,6 +54,35 @@ class User(TimestampMixin, Base):
     emirates_id = Column(String(25), nullable=True)
     address = Column(String(255), nullable=True)
 
+class FeedBack(TimestampMixin, Base):
+    __tablename__ = "feedback"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    rating = Column(Integer, nullable=False)
+    comment = Column(String(255), nullable=True)
+
+
+class FeedBackClient(TimestampMixin, Base):
+    __tablename__ = "feedbackclient"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(510), nullable=True)
+    description = Column(String(510), nullable=True)
+
+
+class Message(TimestampMixin, Base):
+    __tablename__ = "messages"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    name = Column(String(55), index=True, nullable=False)
+    email = Column(String(55), index=True, nullable=False)
+    message = Column(String(512), index=True, nullable=True)
+
+class Subscription(TimestampMixin, Base):
+    __tablename__ = "subscription"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    
 
 class PersonalDetails(TimestampMixin, Base):
     __tablename__ = "personaldetails"

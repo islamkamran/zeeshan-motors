@@ -65,6 +65,91 @@ def create_user_admin(db: Session, user_data):
     return new_user.id
 
 
+"""comprehensive vehicle search"""
+
+def search_vehicles_inventory(db: Session, search_criteria: dict):
+    print(search_criteria)
+    query = db.query(Vehicle).filter(Vehicle.status.in_(["Instock", "Outofstock"]))
+
+    if 'make' in search_criteria and search_criteria['make'] and hasattr(Vehicle, "make"):
+        query = query.filter(Vehicle.make.ilike(f"%{search_criteria['make']}%"))        
+        # query = query.filter(Vehicle.maker == search_criteria['car_maker'])
+    
+    if 'model' in search_criteria and search_criteria['model'] and hasattr(Vehicle, "model"):
+        query = query.filter(Vehicle.model.ilike(f"%{search_criteria['model']}%"))
+        # query = query.filter(Vehicle.model == search_criteria['car_model'])
+    
+    if 'grade' in search_criteria and search_criteria['grade'] and hasattr(Vehicle, "grade"):
+        query = query.filter(Vehicle.grade.ilike(f"%{search_criteria['grade']}%"))
+        # query = query.filter(Vehicle.body == search_criteria['body'])
+
+    # if 'year' in search_criteria and search_criteria['year'] and hasattr(Vehicle, "year"):
+    #     query = query.filter(Vehicle.year.ilike(f"%{search_criteria['year']}%"))
+    #     # query = query.filter(Vehicle.gearbox == search_criteria['gearbox'])
+
+    if 'year' in search_criteria and search_criteria['year'] and hasattr(Vehicle, "year"):
+        try:
+            input_year = int(search_criteria['year'])
+            # Filter the range from input_year - 4 to input_year
+            query = query.filter(Vehicle.year.between(input_year - 4, input_year))
+        except ValueError:
+            # Handle cases where 'year' is not a valid integer
+            raise ValueError("Invalid year provided in search criteria.")
+
+
+    if 'chassis' in search_criteria and search_criteria['chassis'] and hasattr(Vehicle, "chassis"):
+        query = query.filter(Vehicle.chassis.ilike(f"%{search_criteria['chassis']}%"))
+        # query = query.filter(Vehicle.air_bags == search_criteria['air_bags'])
+    
+    # if 'mileage' in search_criteria and search_criteria['mileage'] and hasattr(Vehicle, "mileage"):
+    #     query = query.filter(Vehicle.mileage.ilike(f"%{search_criteria['mileage']}%"))
+
+    if 'mileage' in search_criteria and search_criteria['mileage'] and hasattr(Vehicle, "mileage"):
+        try:
+            input_mileage = int(search_criteria['mileage'])
+            lower_bound = max(0, input_mileage - 50000)
+            upper_bound = input_mileage
+    
+            # Use SQL functions to clean up the mileage string and filter by range
+            query = query.filter(
+                func.cast(
+                    func.replace(
+                        func.replace(func.replace(Vehicle.mileage, ' km', ''), ',', ''), ' ', ''
+                    ), Integer
+                ).between(lower_bound, upper_bound)
+            )
+        except ValueError:
+            raise ValueError("Invalid mileage provided in search criteria.")
+
+
+    if 'transmission' in search_criteria and search_criteria['transmission'] and hasattr(Vehicle, "transmission"):
+        query = query.filter(Vehicle.transmission.ilike(f"%{search_criteria['transmission']}%"))
+        # query = query.filter(Vehicle.color == ilike(search_criteria['color']))
+
+    if 'displacement' in search_criteria and search_criteria['displacement'] and hasattr(Vehicle, "displacement"):
+        query = query.filter(Vehicle.displacement.ilike(f"%{search_criteria['displacement']}%"))
+        # query = query.filter(Vehicle.fuel == search_criteria['fuel'])
+
+    if 'score' in search_criteria and search_criteria['score'] and hasattr(Vehicle, "score"):
+        query = query.filter(Vehicle.score.ilike(f"%{search_criteria['score']}%"))
+        # query = query.filter(Vehicle.emission == search_criteria['emission'])
+
+    if 'steer' in search_criteria and search_criteria['steer'] and hasattr(Vehicle, "steer"):
+        query = query.filter(Vehicle.steer.ilike(f"%{search_criteria['steer']}%"))
+        # query = query.filter(Vehicle.parking_sensors == search_criteria['parking_sensors'])
+
+    if 'color' in search_criteria and search_criteria['color'] and hasattr(Vehicle, "color"):
+        query = query.filter(Vehicle.color.ilike(f"%{search_criteria['color']}%"))
+
+    if 'fuel' in search_criteria and search_criteria['fuel'] and hasattr(Vehicle, "fuel"):
+        query = query.filter(Vehicle.fuel.ilike(f"%{search_criteria['fuel']}%"))
+    
+    if 'bodytype' in search_criteria and search_criteria['bodytype'] and hasattr(Vehicle, "body_type"):
+        query = query.filter(Vehicle.body_type.ilike(f"%{search_criteria['bodytype']}%"))
+
+    return query.all()
+
+
 """Registering new performancebike"""
 def register_performancebike(db: Session, user_id, vehicle_id, comfort_data):
     # print(sparepart_data.name)
