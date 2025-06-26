@@ -5,33 +5,90 @@ from app.db.db_setup import get_db
 from app.db.schemas import *
 from app.db.crud import *
 import os
+from fastapi.staticfiles import StaticFiles
+from typing import List
+from fastapi import Request
+from urllib.parse import urljoin
 
 router = APIRouter()
 
 
-UPLOAD_DIR = "uploads/cms"
+UPLOAD_DIR = "uploads"
+CMS_BASE_DIR = os.path.join(UPLOAD_DIR, "cms")
 
-async def save_upload_file(file: UploadFile, upload_dir: str = UPLOAD_DIR):
-    try:
-        # Create directory if it doesn't exist
-        os.makedirs(upload_dir, exist_ok=True)
-        
-        # Generate safe filename
-        filename = file.filename.replace(" ", "_")  # Basic sanitization
-        file_path = os.path.join(upload_dir, filename)
-        
-        # Save the file
-        with open(file_path, "wb") as buffer:
-            buffer.write(await file.read())
-        
-        return f"cms/{filename}"  # Return relative path
+async def save_upload_file_cms(file: UploadFile, subdir: str) -> str:
+    """Save uploaded file and return relative URL path"""
+    print("here 1")
+    upload_dir = os.path.join(CMS_BASE_DIR, subdir)
+    os.makedirs(upload_dir, exist_ok=True)
     
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"File upload failed: {str(e)}")
+    # Sanitize filename
+    filename = file.filename.replace(" ", "_")
+    filepath = os.path.join(upload_dir, filename)
+    
+    # Save file
+    with open(filepath, "wb") as buffer:
+        buffer.write(await file.read())
+    
+    # Return relative URL path (without 'uploads' since we'll mount it)
+    return f"cms/{subdir}/{filename}"
+
+async def save_upload_file_aboutus(file: UploadFile, subdir: str) -> str:
+    """Save uploaded file and return relative URL path"""
+    print("here 1")
+    upload_dir = os.path.join(CMS_BASE_DIR, subdir)
+    os.makedirs(upload_dir, exist_ok=True)
+    
+    # Sanitize filename
+    filename = file.filename.replace(" ", "_")
+    filepath = os.path.join(upload_dir, filename)
+    
+    # Save file
+    with open(filepath, "wb") as buffer:
+        buffer.write(await file.read())
+    
+    # Return relative URL path (without 'uploads' since we'll mount it)
+    return f"cms/{subdir}/{filename}"
 
 
-@router.put("/v1/cms", response_model=CMSHomeResponse)
+async def save_upload_file_inventory(file: UploadFile, subdir: str) -> str:
+    """Save uploaded file and return relative URL path"""
+    print("here 1")
+    upload_dir = os.path.join(CMS_BASE_DIR, subdir)
+    os.makedirs(upload_dir, exist_ok=True)
+    
+    # Sanitize filename
+    filename = file.filename.replace(" ", "_")
+    filepath = os.path.join(upload_dir, filename)
+    
+    # Save file
+    with open(filepath, "wb") as buffer:
+        buffer.write(await file.read())
+    
+    # Return relative URL path (without 'uploads' since we'll mount it)
+    return f"cms/{subdir}/{filename}"
+
+async def save_upload_file_productdetails(file: UploadFile, subdir: str) -> str:
+    """Save uploaded file and return relative URL path"""
+    print("here 1")
+    upload_dir = os.path.join(CMS_BASE_DIR, subdir)
+    os.makedirs(upload_dir, exist_ok=True)
+    
+    # Sanitize filename
+    filename = file.filename.replace(" ", "_")
+    filepath = os.path.join(upload_dir, filename)
+    
+    # Save file
+    with open(filepath, "wb") as buffer:
+        buffer.write(await file.read())
+    
+    # Return relative URL path (without 'uploads' since we'll mount it)
+    return f"cms/{subdir}/{filename}"
+
+
+@router.put("/v1/cms")
 async def update_home_cms(
+    request: Request,  # Added for URL generation
     heroTitle: str = Form(...),
     mediaItems: str = Form(...),
     brands: str = Form(...),
@@ -40,15 +97,14 @@ async def update_home_cms(
     categories: str = Form(...),
     fairTitle: str = Form(...),
     fairDescription: str = Form(...),
-    fairImage: Optional[UploadFile] = File(None),
+    fairImage: Optional[List[UploadFile]] = File(default=None),
     sliderText: str = Form(...),
     dealTitle: str = Form(...),
     dealDescription: str = Form(...),
-    dealImage: Optional[UploadFile] = File(None),
+    dealImage: Optional[List[UploadFile]] = File(default=None),
     db: Session = Depends(get_db)
 ):
     try:
-        # Parse JSON strings
         data = {
             "heroTitle": heroTitle,
             "mediaItems": json.loads(mediaItems),
@@ -61,51 +117,70 @@ async def update_home_cms(
             "sliderText": sliderText,
             "dealTitle": dealTitle,
             "dealDescription": dealDescription,
-            "fairImage": fairImage.filename if fairImage else None,
-            "dealImage": dealImage.filename if dealImage else None,
         }
-        print("START OK")
-        # Save files if provided (simplified example)
-        if fairImage:
-            data["fairImage"] = await save_upload_file(fairImage, UPLOAD_DIR)
-            print("OK")
-        if dealImage:
-            data["dealImage"] = await save_upload_file(dealImage, UPLOAD_DIR)
-            print("OK OK")
 
-        return update_cms_home(db, CMSHomeCreate(**data))
+        # Handle fair image upload
+        if fairImage and fairImage.size > 0:
+            print(f"Processing fair image: {fairImage.filename}")
+            try:
+                fair_image_path = await save_upload_file_cms(fairImage, "home/fair")
+                data["fairImage"] = fair_image_path
+            except Exception as e:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Failed to save fair image: {str(e)}"
+                )
+
+        # Handle deal image upload
+        if dealImage and dealImage.size > 0:
+            print(f"Processing deal image: {dealImage.filename}")
+            try:
+                deal_image_path = await save_upload_file_cms(dealImage, "home/deal")
+                data["dealImage"] = deal_image_path
+            except Exception as e:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Failed to save deal image: {str(e)}"
+                )
+
+        return update_cms_home(db, data)
     
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Invalid JSON data")
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid JSON data: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/v1/cms", response_model=CMSHomeResponse)
-def read_home_cms(db: Session = Depends(get_db)):
+
+@router.get("/v1/cms")
+def read_home_cms(request: Request, db: Session = Depends(get_db)):
     cms_data = get_cms_home(db)
     if not cms_data:
         raise HTTPException(status_code=404, detail="CMS data not found")
-    return cms_data
-
-
-
-async def save_upload_file(file: UploadFile, subdir: str):
-    os.makedirs(f"{UPLOAD_DIR}/{subdir}", exist_ok=True)
-    filename = f"{subdir}/{file.filename}"
-    filepath = f"{UPLOAD_DIR}/{filename}"
-    with open(filepath, "wb") as buffer:
-        buffer.write(await file.read())
-    return filename
+    
+    # Convert to dict
+    result = cms_data.__dict__
+    
+    # Generate full URLs for images
+    if result.get('fairImage'):
+        result['fairImage'] = str(request.base_url) + f"uploads/{result['fairImage']}"
+    
+    if result.get('dealImage'):
+        result['dealImage'] = str(request.base_url) + f"uploads/{result['dealImage']}"
+    
+    # Remove SQLAlchemy internal state
+    result.pop('_sa_instance_state', None)
+    
+    return result
 
 
 # About Us Endpoints
-@router.put("/v1/about-us", response_model=CMSAboutUsResponse)
+@router.put("/v1/about-us")
 async def update_about_us_cms(
     sectionOneTitle: str = Form(...),
     sectionOneDescription: str = Form(...),
     sectionTwoTitle: str = Form(...),
     sectionTwoDescription: str = Form(...),
-    sectionTwoImage: Optional[UploadFile] = File(None),
+    sectionTwoImages: Optional[List[UploadFile]] = File(default=None),  # Now accepts multiple files
     sectionThreeTitle: str = Form(...),
     sectionThreeH1: str = Form(...),
     sectionThreeD1: str = Form(...),
@@ -132,50 +207,133 @@ async def update_about_us_cms(
         "sectionFourTitle": sectionFourTitle,
         "sectionFourDescription": sectionFourDescription,
     }
-    
-    if sectionTwoImage:
-        data["sectionTwoImage"] = await save_upload_file(sectionTwoImage, "about-us")
+
+
+    print(f"Received files: {sectionTwoImages}")
+    if sectionTwoImages is not None:  # Explicit None check
+        print("Files detected, processing...")
+        image_paths = []
+        for image in sectionTwoImages:
+            if image.size > 0:  # Check if file has content
+                print(f"Processing file: {image.filename}")
+                try:
+                    path = await save_upload_file_aboutus(image, "about-us")
+                    image_paths.append(path)
+                except Exception as e:
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Failed to save image {image.filename}: {str(e)}"
+                    )
+        if image_paths:
+            data["sectionTwoImage"] = json.dumps(image_paths)
+    print(3)
     
     return update_about_us(db, data)
 
 
-@router.get("/v1/about-us", response_model=CMSAboutUsResponse)
-def get_about_us_cms(db: Session = Depends(get_db)):
+@router.get("/v1/about-us")
+def get_about_us_cms(request: Request, db: Session = Depends(get_db)):
     about_us = get_about_us(db)
     if not about_us:
         raise HTTPException(status_code=404, detail="About Us content not found")
-    return about_us
-
+    
+    # Convert to dict
+    result = about_us.__dict__
+    
+    # Process images to direct-viewable URLs
+    if result.get('sectionTwoImage'):
+        try:
+            # Parse stored image paths (could be JSON array or comma-separated)
+            if result['sectionTwoImage'].startswith('['):
+                image_paths = json.loads(result['sectionTwoImage'])
+            else:
+                image_paths = result['sectionTwoImage'].split(',')
+            
+            # Create direct-access URLs
+            result['sectionTwoImage'] = [
+                str(request.base_url) + f"uploads/{path.strip()}"
+                for path in image_paths
+            ]
+        except Exception as e:
+            # Fallback to original if parsing fails
+            result['sectionTwoImage'] = [str(request.base_url) + f"uploads/{result['sectionTwoImage']}"]
+    
+    # Remove SQLAlchemy internal state if present
+    result.pop('_sa_instance_state', None)
+    
+    return result
 
 
 # Inventory Endpoints
-@router.put("/v1/inventory", response_model=CMSInventoryResponse)
+@router.put("/v1/inventory")
 async def update_inventory_cms(
+    request: Request,
     title: str = Form(...),
     description: str = Form(...),
-    image: Optional[UploadFile] = File(None),
+    images: Optional[List[UploadFile]] = File(default=None),  # Now accepts multiple files
     db: Session = Depends(get_db)
 ):
     data = {
         "title": title,
         "description": description,
     }
+
+    print(f"Received {len(images)} image(s) for inventory")
     
-    if image:
-        data["image"] = await save_upload_file(image, "inventory")
+    if images:  # Check if any files were uploaded
+        image_paths = []
+        for image in images:
+            if image.size > 0:  # Check if file has content
+                print(f"Processing file: {image.filename}")
+                try:
+                    path = await save_upload_file_inventory(image, "inventory")
+                    image_paths.append(path)
+                except Exception as e:
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Failed to save image {image.filename}: {str(e)}"
+                    )
+        if image_paths:
+            data["image"] = json.dumps(image_paths)  # Store as JSON array
     
     return update_inventory(db, data)
 
-@router.get("/v1/inventory", response_model=CMSInventoryResponse)
-def get_inventory_cms(db: Session = Depends(get_db)):
+@router.get("/v1/inventory")
+def get_inventory_cms(request: Request, db: Session = Depends(get_db)):
     inventory = get_inventory(db)
     if not inventory:
         raise HTTPException(status_code=404, detail="Inventory content not found")
-    return inventory
+    
+    # Convert to dict
+    result = inventory.__dict__
+    
+    # Process images to direct-viewable URLs
+    if result.get('image'):
+        try:
+            # Parse stored image paths (JSON array)
+            image_paths = json.loads(result['image'])
+            
+            # Create direct-access URLs
+            result['image'] = [
+                str(request.base_url) + f"uploads/{path.strip()}"
+                for path in image_paths
+            ]
+        except json.JSONDecodeError:
+            # Fallback to single image if not JSON array
+            result['image'] = [str(request.base_url) + f"uploads/{result['image']}"]
+        except Exception as e:
+            print(f"Error processing image URLs: {str(e)}")
+            result['image'] = []
+    
+    # Remove SQLAlchemy internal state if present
+    result.pop('_sa_instance_state', None)
+    
+    return result
 
 # Product Detail Endpoints
-@router.put("/v1/product-detail", response_model=CMSProductDetailResponse)
+@router.put("/v1/product-detail")
 async def update_product_detail_cms(
+    request: Request,
     title: str = Form(...),
     description: str = Form(...),
     h1: str = Form(...),
@@ -186,7 +344,7 @@ async def update_product_detail_cms(
     h3Description: str = Form(...),
     title2: str = Form(...),
     description2: str = Form(...),
-    image: Optional[UploadFile] = File(None),
+    images: Optional[List[UploadFile]] = File(default=None),  # Changed to multiple files
     db: Session = Depends(get_db)
 ):
     data = {
@@ -201,18 +359,56 @@ async def update_product_detail_cms(
         "title2": title2,
         "description2": description2,
     }
+
+    print(f"Received {len(images)} image(s) for product detail")
     
-    if image:
-        data["image"] = await save_upload_file(image, "product-detail")
+    if images:
+        image_paths = []
+        for image in images:
+            if image.size > 0:
+                print(f"Processing file: {image.filename}")
+                try:
+                    path = await save_upload_file_productdetails(image, "product-detail")
+                    image_paths.append(path)
+                except Exception as e:
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Failed to save image {image.filename}: {str(e)}"
+                    )
+        if image_paths:
+            data["image"] = json.dumps(image_paths)  # Store as JSON array
     
     return update_product_detail(db, data)
 
-@router.get("/v1/product-detail", response_model=CMSProductDetailResponse)
-def get_product_detail_cms(db: Session = Depends(get_db)):
+@router.get("/v1/product-detail")
+def get_product_detail_cms(request: Request, db: Session = Depends(get_db)):
     product = get_product_detail(db)
     if not product:
         raise HTTPException(status_code=404, detail="Product detail content not found")
-    return product
+    
+    # Convert to dict
+    result = product.__dict__
+    
+    # Process images to direct-viewable URLs
+    if result.get('image'):
+        try:
+            # Handle both JSON array and single path (backward compatibility)
+            if result['image'].startswith('['):
+                image_paths = json.loads(result['image'])
+                result['image'] = [
+                    str(request.base_url) + f"uploads/{path.strip()}"
+                    for path in image_paths
+                ]
+            else:
+                result['image'] = [str(request.base_url) + f"uploads/{result['image']}"]
+        except Exception as e:
+            print(f"Error processing image URLs: {str(e)}")
+            result['image'] = []
+    
+    # Remove SQLAlchemy internal state
+    result.pop('_sa_instance_state', None)
+    
+    return result
 
 # Contact Endpoints
 @router.put("/v1/contact", response_model=CMSContactResponse)
