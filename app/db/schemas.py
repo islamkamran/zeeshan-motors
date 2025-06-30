@@ -32,6 +32,7 @@ class FeedbackClientSchema(BaseModel):
 class MessageData(BaseModel):
     name: str
     email: str
+    phone: str
     message: str
 
 class SubscriptionData(BaseModel):

@@ -76,6 +76,7 @@ class Message(TimestampMixin, Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     name = Column(String(55), index=True, nullable=False)
     email = Column(String(55), index=True, nullable=False)
+    phone = Column(String(55), index=True, nullable=False)
     message = Column(String(512), index=True, nullable=True)
 
 class Subscription(TimestampMixin, Base):
