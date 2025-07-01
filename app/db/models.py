@@ -14,18 +14,27 @@ class CMSHome(TimestampMixin, Base):
     
     id = Column(Integer, primary_key=True, index=True)
     heroTitle = Column(String(255))
-    mediaItems = Column(JSON)
-    brands = Column(JSON)
-    priceRanges = Column(JSON)
-    bodyTypes = Column(JSON)
-    categories = Column(JSON)
-    fairTitle = Column(String(255))
-    fairDescription = Column(Text)
-    fairImage = Column(String(255), nullable=True)
-    sliderText = Column(Text)
-    dealTitle = Column(String(255))
-    dealDescription = Column(Text)
-    dealImage = Column(String(255), nullable=True)
+    mediaItems = Column(Text)
+
+
+# class CMSHome(TimestampMixin, Base):
+#     __tablename__ = "cms_home"
+    
+#     id = Column(Integer, primary_key=True, index=True)
+#     heroTitle = Column(String(255))
+#     mediaItems = Column(JSON)
+#     brands = Column(JSON)
+#     priceRanges = Column(JSON)
+#     bodyTypes = Column(JSON)
+#     categories = Column(JSON)
+#     fairTitle = Column(String(255))
+#     fairDescription = Column(Text)
+#     fairImage = Column(String(255), nullable=True)
+#     sliderText = Column(Text)
+#     dealTitle = Column(String(255))
+#     dealDescription = Column(Text)
+#     dealImage = Column(String(255), nullable=True)
+
 
 class Notification(TimestampMixin, Base):
     __tablename__ = "notifications"

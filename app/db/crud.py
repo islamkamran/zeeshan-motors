@@ -5,16 +5,22 @@ from app.db.schemas import *
 from app.helper.emails import send_user_details_to_admin,send_user_details_to_client,send_user_details_to_user
 from sqlalchemy import text
 from fastapi import APIRouter, HTTPException, Depends, Form, status
+import os
+import shutil
 
-
-
+def format_image_name(filename: str) -> str:
+    """Ensure the image name is formatted correctly."""
+    base_name, ext = os.path.splitext(filename)
+    if not base_name.startswith("cms"):
+        return f"cms_{base_name}{ext}"
+    return filename
 
 def get_cms_home(db: Session):
     return db.query(CMSHome).first()
 
 def create_cms_home(db: Session, cms_data: CMSHomeCreate):
     print("NOT OK CMS TO OK CMS")
-    db_cms = CMSHome(**cms_data.dict())
+    db_cms = CMSHome(**cms_data)
     db.add(db_cms)
     db.commit()
     db.refresh(db_cms)

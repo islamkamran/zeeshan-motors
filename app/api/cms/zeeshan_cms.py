@@ -14,6 +14,7 @@ router = APIRouter()
 
 
 UPLOAD_DIR = "uploads"
+UPLOAD_DIREC = "uploads/cms/home"
 CMS_BASE_DIR = os.path.join(UPLOAD_DIR, "cms")
 
 async def save_upload_file_cms(file: UploadFile, subdir: str) -> str:
@@ -85,68 +86,42 @@ async def save_upload_file_productdetails(file: UploadFile, subdir: str) -> str:
     # Return relative URL path (without 'uploads' since we'll mount it)
     return f"cms/{subdir}/{filename}"
 
-
+# **************** SECTION 1 ***********************
 @router.put("/v1/cms")
 async def update_home_cms(
     request: Request,  # Added for URL generation
-    heroTitle: str = Form(...),
-    mediaItems: str = Form(...),
-    brands: str = Form(...),
-    priceRanges: str = Form(...),
-    bodyTypes: str = Form(...),
-    categories: str = Form(...),
-    fairTitle: str = Form(...),
-    fairDescription: str = Form(...),
-    fairImage: Optional[List[UploadFile]] = File(default=None),
-    sliderText: str = Form(...),
-    dealTitle: str = Form(...),
-    dealDescription: str = Form(...),
-    dealImage: Optional[List[UploadFile]] = File(default=None),
+    heroTitle: str = Form(None),
+    mediaItems: list[UploadFile] = File(None),
     db: Session = Depends(get_db)
 ):
     try:
+        image_paths = []
+
+        # Save image files to the uploads directory
+        if mediaItems is not None:
+            for img in mediaItems:
+                # img.filename = str(vehicle_id) + img.filename
+                img.filename = format_image_name(img.filename)
+
+                print(img.filename)
+                file_location = os.path.join(UPLOAD_DIREC, img.filename)
+                with open(file_location, "wb") as buffer:
+                    shutil.copyfileobj(img.file, buffer)
+                print(file_location)
+                image_paths.append(file_location)
+
+            # Convert list of paths to a comma-separated string
+            mediaItems = ",".join(image_paths)
+
         data = {
             "heroTitle": heroTitle,
-            "mediaItems": json.loads(mediaItems),
-            "brands": json.loads(brands),
-            "priceRanges": json.loads(priceRanges),
-            "bodyTypes": json.loads(bodyTypes),
-            "categories": json.loads(categories),
-            "fairTitle": fairTitle,
-            "fairDescription": fairDescription,
-            "sliderText": sliderText,
-            "dealTitle": dealTitle,
-            "dealDescription": dealDescription,
+            "mediaItems": mediaItems
         }
-
-        # Handle fair image upload
-        if fairImage and fairImage.size > 0:
-            print(f"Processing fair image: {fairImage.filename}")
-            try:
-                fair_image_path = await save_upload_file_cms(fairImage, "home/fair")
-                data["fairImage"] = fair_image_path
-            except Exception as e:
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Failed to save fair image: {str(e)}"
-                )
-
-        # Handle deal image upload
-        if dealImage and dealImage.size > 0:
-            print(f"Processing deal image: {dealImage.filename}")
-            try:
-                deal_image_path = await save_upload_file_cms(dealImage, "home/deal")
-                data["dealImage"] = deal_image_path
-            except Exception as e:
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Failed to save deal image: {str(e)}"
-                )
 
         return update_cms_home(db, data)
     
     except json.JSONDecodeError as e:
-        raise HTTPException(status_code=400, detail=f"Invalid JSON data: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -160,17 +135,95 @@ def read_home_cms(request: Request, db: Session = Depends(get_db)):
     # Convert to dict
     result = cms_data.__dict__
     
-    # Generate full URLs for images
-    if result.get('fairImage'):
-        result['fairImage'] = str(request.base_url) + f"uploads/{result['fairImage']}"
+    image_urls = []
+
+    # Retrieve image paths and convert to accessible URLs
+    if result.get("mediaItems") is not None:
+        # If mediaItems is a string (comma-separated paths)
+        if isinstance(result["mediaItems"], str):
+            image_paths = result["mediaItems"].split(",")
+            image_urls = [f"{request.base_url}uploads/cms/home/{os.path.basename(path.strip())}" 
+                         for path in image_paths if path.strip()]
+        # If mediaItems is a list of objects with image property
+        elif hasattr(result["mediaItems"][0], 'image'):
+            for img in result['mediaItems']:
+                if img.image:
+                    image_paths = img.image.split(",")
+                    image_urls.extend([f"{request.base_url}uploads/cms/home/{os.path.basename(path.strip())}" 
+                                     for path in image_paths if path.strip()])
     
-    if result.get('dealImage'):
-        result['dealImage'] = str(request.base_url) + f"uploads/{result['dealImage']}"
-    
+    result["mediaItems"] = image_urls
     # Remove SQLAlchemy internal state
     result.pop('_sa_instance_state', None)
     
     return result
+
+# **************** SECTION 2 ***********************
+
+# @router.put("/v1/cms")
+# async def update_home_cms(
+#     request: Request,  # Added for URL generation
+#     heroTitle: str = Form(...),
+#     mediaItems: str = Form(...),
+#     brands: str = Form(...),
+#     priceRanges: str = Form(...),
+#     bodyTypes: str = Form(...),
+#     categories: str = Form(...),
+#     fairTitle: str = Form(...),
+#     fairDescription: str = Form(...),
+#     fairImage: Optional[List[UploadFile]] = File(default=None),
+#     sliderText: str = Form(...),
+#     dealTitle: str = Form(...),
+#     dealDescription: str = Form(...),
+#     dealImage: Optional[List[UploadFile]] = File(default=None),
+#     db: Session = Depends(get_db)
+# ):
+#     try:
+#         data = {
+#             "heroTitle": heroTitle,
+#             "mediaItems": json.loads(mediaItems),
+#             "brands": json.loads(brands),
+#             "priceRanges": json.loads(priceRanges),
+#             "bodyTypes": json.loads(bodyTypes),
+#             "categories": json.loads(categories),
+#             "fairTitle": fairTitle,
+#             "fairDescription": fairDescription,
+#             "sliderText": sliderText,
+#             "dealTitle": dealTitle,
+#             "dealDescription": dealDescription,
+#         }
+
+#         # Handle fair image upload
+#         if fairImage and fairImage.size > 0:
+#             print(f"Processing fair image: {fairImage.filename}")
+#             try:
+#                 fair_image_path = await save_upload_file_cms(fairImage, "home/fair")
+#                 data["fairImage"] = fair_image_path
+#             except Exception as e:
+#                 raise HTTPException(
+#                     status_code=500,
+#                     detail=f"Failed to save fair image: {str(e)}"
+#                 )
+
+#         # Handle deal image upload
+#         if dealImage and dealImage.size > 0:
+#             print(f"Processing deal image: {dealImage.filename}")
+#             try:
+#                 deal_image_path = await save_upload_file_cms(dealImage, "home/deal")
+#                 data["dealImage"] = deal_image_path
+#             except Exception as e:
+#                 raise HTTPException(
+#                     status_code=500,
+#                     detail=f"Failed to save deal image: {str(e)}"
+#                 )
+
+#         return update_cms_home(db, data)
+    
+#     except json.JSONDecodeError as e:
+#         raise HTTPException(status_code=400, detail=f"Invalid JSON data: {str(e)}")
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+    
 
 
 # About Us Endpoints
