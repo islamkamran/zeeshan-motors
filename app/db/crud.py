@@ -15,6 +15,20 @@ def format_image_name(filename: str) -> str:
         return f"cms_{base_name}{ext}"
     return filename
 
+def format_image_fair(filename: str) -> str:
+    """Ensure the image name is formatted correctly."""
+    base_name, ext = os.path.splitext(filename)
+    if not base_name.startswith("fair"):
+        return f"fair_{base_name}{ext}"
+    return filename
+
+def format_image_deal(filename: str) -> str:
+    """Ensure the image name is formatted correctly."""
+    base_name, ext = os.path.splitext(filename)
+    if not base_name.startswith("deal"):
+        return f"deal_{base_name}{ext}"
+    return filename
+
 def get_cms_home(db: Session):
     return db.query(CMSHome).first()
 
@@ -31,6 +45,32 @@ def update_cms_home(db: Session, cms_data: CMSHomeUpdate):
     if not db_cms:
         print("NOT OK CMS")
         return create_cms_home(db, cms_data)
+    
+    print("OK CMS")
+    for field, value in cms_data.dict().items():
+        setattr(db_cms, field, value)
+    
+    db.commit()
+    db.refresh(db_cms)
+    return db_cms
+
+
+def get_cms_deal(db: Session):
+    return db.query(CMSDeal).first()
+
+def create_cms_deal(db: Session, cms_data: CMSDealCreate):
+    print("NOT OK DEAL TO OK DEAL")
+    db_cms = CMSDeal(**cms_data)
+    db.add(db_cms)
+    db.commit()
+    db.refresh(db_cms)
+    return db_cms
+
+def update_cms_deal(db: Session, cms_data: CMSDealUpdate):
+    db_cms = get_cms_deal(db)
+    if not db_cms:
+        print("NOT OK DEAL")
+        return create_cms_deal(db, cms_data)
     
     print("OK CMS")
     for field, value in cms_data.dict().items():

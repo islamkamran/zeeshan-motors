@@ -303,6 +303,23 @@ class CMSHomeCreate(CMSHomeBase):
 class CMSHomeUpdate(CMSHomeBase):
     pass
 
+
+class CMSDealBase(BaseModel):
+    fairTitle: str
+    fairDescription: str
+    fairImage: Optional[str] = None
+    sliderText: str
+    dealTitle: str
+    dealDescription: str
+    dealImage: Optional[str] = None
+
+class CMSDealCreate(CMSDealBase):
+    pass
+
+class CMSDealUpdate(CMSDealBase):
+    pass
+
+
 class CMSHomeResponse(CMSHomeBase):
     id: int
     

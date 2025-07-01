@@ -160,71 +160,124 @@ def read_home_cms(request: Request, db: Session = Depends(get_db)):
 
 # **************** SECTION 2 ***********************
 
-# @router.put("/v1/cms")
-# async def update_home_cms(
-#     request: Request,  # Added for URL generation
-#     heroTitle: str = Form(...),
-#     mediaItems: str = Form(...),
-#     brands: str = Form(...),
-#     priceRanges: str = Form(...),
-#     bodyTypes: str = Form(...),
-#     categories: str = Form(...),
-#     fairTitle: str = Form(...),
-#     fairDescription: str = Form(...),
-#     fairImage: Optional[List[UploadFile]] = File(default=None),
-#     sliderText: str = Form(...),
-#     dealTitle: str = Form(...),
-#     dealDescription: str = Form(...),
-#     dealImage: Optional[List[UploadFile]] = File(default=None),
-#     db: Session = Depends(get_db)
-# ):
-#     try:
-#         data = {
-#             "heroTitle": heroTitle,
-#             "mediaItems": json.loads(mediaItems),
-#             "brands": json.loads(brands),
-#             "priceRanges": json.loads(priceRanges),
-#             "bodyTypes": json.loads(bodyTypes),
-#             "categories": json.loads(categories),
-#             "fairTitle": fairTitle,
-#             "fairDescription": fairDescription,
-#             "sliderText": sliderText,
-#             "dealTitle": dealTitle,
-#             "dealDescription": dealDescription,
-#         }
+@router.put("/v1/cms_deal")
+async def update_hdeal_cms(
+    request: Request,  # Added for URL generation
+    fairTitle: str = Form(...),
+    fairDescription: str = Form(...),
+    fairImage: list[UploadFile] = File(None),
+    sliderText: str = Form(...),
+    dealTitle: str = Form(...),
+    dealDescription: str = Form(...),
+    dealImage: list[UploadFile] = File(None),
+    db: Session = Depends(get_db)
+):
+    try:
 
-#         # Handle fair image upload
-#         if fairImage and fairImage.size > 0:
-#             print(f"Processing fair image: {fairImage.filename}")
-#             try:
-#                 fair_image_path = await save_upload_file_cms(fairImage, "home/fair")
-#                 data["fairImage"] = fair_image_path
-#             except Exception as e:
-#                 raise HTTPException(
-#                     status_code=500,
-#                     detail=f"Failed to save fair image: {str(e)}"
-#                 )
+        image_fair = []
+        image_deal = []
 
-#         # Handle deal image upload
-#         if dealImage and dealImage.size > 0:
-#             print(f"Processing deal image: {dealImage.filename}")
-#             try:
-#                 deal_image_path = await save_upload_file_cms(dealImage, "home/deal")
-#                 data["dealImage"] = deal_image_path
-#             except Exception as e:
-#                 raise HTTPException(
-#                     status_code=500,
-#                     detail=f"Failed to save deal image: {str(e)}"
-#                 )
 
-#         return update_cms_home(db, data)
+        # Save image fair files to the uploads directory
+        if fairImage is not None:
+            for img in fairImage:
+                # img.filename = str(vehicle_id) + img.filename
+                img.filename = format_image_fair(img.filename)
+
+                print(img.filename)
+                file_location = os.path.join(UPLOAD_DIREC, img.filename)
+                with open(file_location, "wb") as buffer:
+                    shutil.copyfileobj(img.file, buffer)
+                print(file_location)
+                image_fair.append(file_location)
+
+            # Convert list of paths to a comma-separated string
+            fairImage = ",".join(image_fair)
+
+
+        if dealImage is not None:
+            for img in dealImage:
+                # img.filename = str(vehicle_id) + img.filename
+                img.filename = format_image_deal(img.filename)
+
+                print(img.filename)
+                file_location = os.path.join(UPLOAD_DIREC, img.filename)
+                with open(file_location, "wb") as buffer:
+                    shutil.copyfileobj(img.file, buffer)
+                print(file_location)
+                image_deal.append(file_location)
+
+            # Convert list of paths to a comma-separated string
+            dealImage = ",".join(image_deal)
+
+        data = {
+            "fairTitle": fairTitle,
+            "fairDescription": fairDescription,
+            "fairImage": fairImage,
+            "sliderText": sliderText,
+            "dealTitle": dealTitle,
+            "dealDescription": dealDescription,
+            "dealImage": dealImage
+        }
+
+        return update_cms_deal(db, data)
     
-#     except json.JSONDecodeError as e:
-#         raise HTTPException(status_code=400, detail=f"Invalid JSON data: {str(e)}")
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid JSON data: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
 
+@router.get("/v1/cms_deal")
+def read_deal_cms(request: Request, db: Session = Depends(get_db)):
+    cms_data = get_cms_deal(db)
+    if not cms_data:
+        raise HTTPException(status_code=404, detail="CMS data not found")
+    
+    # Convert to dict
+    result = cms_data.__dict__
+    
+    image_fair = []
+    image_deal = []
+
+    # Retrieve image paths and convert to accessible URLs
+    if result.get("fairImage") is not None:
+        # If fairImage is a string (comma-separated paths)
+        if isinstance(result["fairImage"], str):
+            image_paths = result["fairImage"].split(",")
+            image_fair = [f"{request.base_url}uploads/cms/home/{os.path.basename(path.strip())}" 
+                         for path in image_paths if path.strip()]
+        # If fairImage is a list of objects with image property
+        elif hasattr(result["fairImage"][0], 'image'):
+            for img in result['fairImage']:
+                if img.image:
+                    image_paths = img.image.split(",")
+                    image_fair.extend([f"{request.base_url}uploads/cms/home/{os.path.basename(path.strip())}" 
+                                     for path in image_paths if path.strip()])
+    
+    result["fairImage"] = image_fair
+
+
+    # Retrieve image paths and convert to accessible URLs
+    if result.get("dealImage") is not None:
+        # If dealImage is a string (comma-separated paths)
+        if isinstance(result["dealImage"], str):
+            image_paths = result["dealImage"].split(",")
+            image_deal = [f"{request.base_url}uploads/cms/home/{os.path.basename(path.strip())}" 
+                         for path in image_paths if path.strip()]
+        # If dealImage is a list of objects with image property
+        elif hasattr(result["dealImage"][0], 'image'):
+            for img in result['dealImage']:
+                if img.image:
+                    image_paths = img.image.split(",")
+                    image_deal.extend([f"{request.base_url}uploads/cms/home/{os.path.basename(path.strip())}" 
+                                     for path in image_paths if path.strip()])
+    
+    result["dealImage"] = image_deal
+    # Remove SQLAlchemy internal state
+    result.pop('_sa_instance_state', None)
+    
+    return result
 
 # About Us Endpoints
 @router.put("/v1/about-us")

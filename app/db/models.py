@@ -17,23 +17,17 @@ class CMSHome(TimestampMixin, Base):
     mediaItems = Column(Text)
 
 
-# class CMSHome(TimestampMixin, Base):
-#     __tablename__ = "cms_home"
+class CMSDeal(TimestampMixin, Base):
+    __tablename__ = "cms_home_deal"
     
-#     id = Column(Integer, primary_key=True, index=True)
-#     heroTitle = Column(String(255))
-#     mediaItems = Column(JSON)
-#     brands = Column(JSON)
-#     priceRanges = Column(JSON)
-#     bodyTypes = Column(JSON)
-#     categories = Column(JSON)
-#     fairTitle = Column(String(255))
-#     fairDescription = Column(Text)
-#     fairImage = Column(String(255), nullable=True)
-#     sliderText = Column(Text)
-#     dealTitle = Column(String(255))
-#     dealDescription = Column(Text)
-#     dealImage = Column(String(255), nullable=True)
+    id = Column(Integer, primary_key=True, index=True)
+    fairTitle = Column(String(255))
+    fairDescription = Column(Text)
+    fairImage = Column(String(255), nullable=True)
+    sliderText = Column(Text)
+    dealTitle = Column(String(255))
+    dealDescription = Column(Text)
+    dealImage = Column(String(255), nullable=True)
 
 
 class Notification(TimestampMixin, Base):
