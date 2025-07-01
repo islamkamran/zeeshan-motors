@@ -47,7 +47,7 @@ def update_cms_home(db: Session, cms_data: CMSHomeUpdate):
         return create_cms_home(db, cms_data)
     
     print("OK CMS")
-    for field, value in cms_data.dict().items():
+    for field, value in cms_data.items():
         setattr(db_cms, field, value)
     
     db.commit()
@@ -73,7 +73,7 @@ def update_cms_deal(db: Session, cms_data: CMSDealUpdate):
         return create_cms_deal(db, cms_data)
     
     print("OK CMS")
-    for field, value in cms_data.dict().items():
+    for field, value in cms_data.items():
         setattr(db_cms, field, value)
     
     db.commit()
