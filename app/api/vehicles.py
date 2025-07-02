@@ -105,7 +105,7 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
                 img.filename = format_image_name_int(vehicle_id, img.filename)
 
                 print(img.filename)
-                file_location = os.path.join(UPLOAD_DIR_INT, img.filename)
+                file_location = os.path.join(UPLOAD_DIR_EXT, img.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
                 print(file_location)
