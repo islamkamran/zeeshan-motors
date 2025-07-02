@@ -7,7 +7,7 @@ from app.helper.jwt_token import jwt_access_token
 from app.helper.jwt_token_decode import decode_token
 from app.helper.barcode_generator import generate_barcode_vehicle
 from app.helper.jwt_token import is_token_blacklisted
-from app.helper.image_name_maker import format_image_name
+from app.helper.image_name_maker import *
 import logging
 import os
 import shutil
@@ -27,12 +27,13 @@ import requests
 from datetime import datetime
 
 EXPORT_DIR = "exports/"  # Directory to save the file
-UPLOAD_DIR = "uploads/vehicles/"  # Ensure this directory exists
+UPLOAD_DIR_INT = "uploads/vehicles/interior"  # Ensure this directory exists
+UPLOAD_DIR_EXT = "uploads/vehicles/exterior"  # Ensure this directory exists
 
 router = APIRouter()
 
 @router.post("/v1/user/vehicles")
-def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: str = Form(None), model: str = Form(None), year: str = Form(None), title: str = Form(None), name: str = Form(None),chassis_number: str = Form(None),mileage: str = Form(None),damage_details: str = Form(None),transmission: str = Form(None), clynder: str = Form(None), location: str = Form(None), color: str = Form(None),fuel: str = Form(None),engine: str = Form(None), status: str = Form(None),description: str = Form(None),grade: str = Form(None),score: str = Form(None),steer: str = Form(None),displacement: str = Form(None),total_price: float = Form(None),sold_price: float = Form(None),recieved_amount: float = Form(None),balance_amount: float = Form(None),auction_result: str = Form(None), condition: str = Form(None), image: list[UploadFile] = File(None), video: list[UploadFile] = File(None), drive_type: str = Form(None),doors: str = Form(None),engine_name: str = Form(None),supplier: str = Form(None),is_clear: bool = Form(None), report_status: str = Form(None),feature: str = Form(None), air_conditioner: str = Form(None), digital_odometer: str = Form(None), heater: str = Form(None),sunroof: str = Form(None),power_windows: str = Form(None),tv_led: str = Form(None), leather_seats: str = Form(None), tachometer: str = Form(None), headlight_leveler: str = Form(None), am_fm_radio: str = Form(None),climate_control: str = Form(None),armrest_console: str = Form(None),rear_seat_armrest_centre_console: str = Form(None),abs_antilock_braking: str = Form(None),child_safety_lock: str = Form(None),driver_air_bag: str = Form(None),passanger_air_bag: str = Form(None),rear_seat_air_bag: str = Form(None),curtain_air_bag: str = Form(None),power_door_lock: str = Form(None),traction_control: str = Form(None),oil_brakes: str = Form(None), air_brakes: str = Form(None),tool_kit: str = Form(None),stepney_tyre: str = Form(None),foot_parking_brake: str = Form(None),fog_lights_front: str = Form(None),alloy_rims: str = Form(None),high_deck: str = Form(None),electric_pump: str = Form(None),justlow: str = Form(None),crane_step: str = Form(None),HID_headlights: str = Form(None),rear_wiper: str = Form(None),sun_visor: str = Form(None), power_streeing: str = Form(None),push_start_smartkey: str = Form(None),keyless_entry: str = Form(None),key_start: str = Form(None),navigation: str = Form(None),remote_controller: str = Form(None),android_led: str = Form(None),bluetooth: str = Form(None),front_door_speaker: str = Form(None),rear_door_speaker: str = Form(None),rear_deck_speaker: str = Form(None),ECO_mode: str = Form(None),heated_seats: str = Form(None),power_seats: str = Form(None),power_side_mirrors: str = Form(None),electric_rearview_mirror: str = Form(None),dashboard_speakers: str = Form(None),max_length: str = Form(None),height: str = Form(None),wheel_base: str = Form(None),height_including_roof_rails: str = Form(None),luggage_capacity_seatsup: str = Form(None),luggage_capacity_seatsdown: str = Form(None),width: str = Form(None),width_including_mirrors: str = Form(None),gross_vehicle_weight: str = Form(None),max_loading_weight: str = Form(None),max_roof_load: str = Form(None),number_of_seats: str = Form(None), fuel_tank_capacity: str = Form(None),max_towing_weight_braked: str = Form(None),max_towing_weight_unbraked: str = Form(None),minimum_kerbweight: str = Form(None),turning_circle_kerb_to_kerb: str = Form(None),desmodromic_engine_technology: str = Form(None), fuel_injection: str = Form(None), lightweight_design: str = Form(None), high_performance_suspension: str = Form(None), riding_ergonomics: str = Form(None), seat: str = Form(None), instrumentation: str = Form(None), fuel_capacity: str = Form(None), high_performance_brakes: str = Form(None), high_quality_tires: str = Form(None), lighting: str = Form(None), storage: str = Form(None), security: str = Form(None), adjustable_suspension: str = Form(None), authorization: str = Header(None), db: Session = Depends(get_db)):
+def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: str = Form(None), model: str = Form(None), year: str = Form(None), title: str = Form(None), name: str = Form(None),chassis_number: str = Form(None),mileage: str = Form(None),damage_details: str = Form(None),transmission: str = Form(None), clynder: str = Form(None), location: str = Form(None), color: str = Form(None),fuel: str = Form(None),engine: str = Form(None), status: str = Form(None),description: str = Form(None),grade: str = Form(None),score: str = Form(None),steer: str = Form(None),displacement: str = Form(None),total_price: float = Form(None),sold_price: float = Form(None),recieved_amount: float = Form(None),balance_amount: float = Form(None),auction_result: str = Form(None), condition: str = Form(None), image_interior: list[UploadFile] = File(None), image_exterior: list[UploadFile] = File(None), video: list[UploadFile] = File(None), drive_type: str = Form(None),doors: str = Form(None),engine_name: str = Form(None),supplier: str = Form(None),is_clear: bool = Form(None), report_status: str = Form(None),feature: str = Form(None), air_conditioner: str = Form(None), digital_odometer: str = Form(None), heater: str = Form(None),sunroof: str = Form(None),power_windows: str = Form(None),tv_led: str = Form(None), leather_seats: str = Form(None), tachometer: str = Form(None), headlight_leveler: str = Form(None), am_fm_radio: str = Form(None),climate_control: str = Form(None),armrest_console: str = Form(None),rear_seat_armrest_centre_console: str = Form(None),abs_antilock_braking: str = Form(None),child_safety_lock: str = Form(None),driver_air_bag: str = Form(None),passanger_air_bag: str = Form(None),rear_seat_air_bag: str = Form(None),curtain_air_bag: str = Form(None),power_door_lock: str = Form(None),traction_control: str = Form(None),oil_brakes: str = Form(None), air_brakes: str = Form(None),tool_kit: str = Form(None),stepney_tyre: str = Form(None),foot_parking_brake: str = Form(None),fog_lights_front: str = Form(None),alloy_rims: str = Form(None),high_deck: str = Form(None),electric_pump: str = Form(None),justlow: str = Form(None),crane_step: str = Form(None),HID_headlights: str = Form(None),rear_wiper: str = Form(None),sun_visor: str = Form(None), power_streeing: str = Form(None),push_start_smartkey: str = Form(None),keyless_entry: str = Form(None),key_start: str = Form(None),navigation: str = Form(None),remote_controller: str = Form(None),android_led: str = Form(None),bluetooth: str = Form(None),front_door_speaker: str = Form(None),rear_door_speaker: str = Form(None),rear_deck_speaker: str = Form(None),ECO_mode: str = Form(None),heated_seats: str = Form(None),power_seats: str = Form(None),power_side_mirrors: str = Form(None),electric_rearview_mirror: str = Form(None),dashboard_speakers: str = Form(None),max_length: str = Form(None),height: str = Form(None),wheel_base: str = Form(None),height_including_roof_rails: str = Form(None),luggage_capacity_seatsup: str = Form(None),luggage_capacity_seatsdown: str = Form(None),width: str = Form(None),width_including_mirrors: str = Form(None),gross_vehicle_weight: str = Form(None),max_loading_weight: str = Form(None),max_roof_load: str = Form(None),number_of_seats: str = Form(None), fuel_tank_capacity: str = Form(None),max_towing_weight_braked: str = Form(None),max_towing_weight_unbraked: str = Form(None),minimum_kerbweight: str = Form(None),turning_circle_kerb_to_kerb: str = Form(None),desmodromic_engine_technology: str = Form(None), fuel_injection: str = Form(None), lightweight_design: str = Form(None), high_performance_suspension: str = Form(None), riding_ergonomics: str = Form(None), seat: str = Form(None), instrumentation: str = Form(None), fuel_capacity: str = Form(None), high_performance_brakes: str = Form(None), high_quality_tires: str = Form(None), lighting: str = Form(None), storage: str = Form(None), security: str = Form(None), adjustable_suspension: str = Form(None), authorization: str = Header(None), db: Session = Depends(get_db)):
     try:
         bind = db.get_bind()
         if bind is None:
@@ -94,16 +95,17 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
 
         """storing images and videos"""
         image_paths = []
+        image_path_ext = []
         video_paths = []
 
-        # Save image files to the uploads directory
-        if image is not None:
-            for img in image:
+        # Save interior images files to the uploads directory
+        if image_interior is not None:
+            for img in image_interior:
                 # img.filename = str(vehicle_id) + img.filename
-                img.filename = format_image_name(vehicle_id, img.filename)
+                img.filename = format_image_name_int(vehicle_id, img.filename)
 
                 print(img.filename)
-                file_location = os.path.join(UPLOAD_DIR, img.filename)
+                file_location = os.path.join(UPLOAD_DIR_INT, img.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
                 print(file_location)
@@ -112,31 +114,57 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
             # Convert list of paths to a comma-separated string
             images_string = ",".join(image_paths)
 
-            veh_images = Images(
-                image = images_string,
+            veh_images_int = Images(
+                image_interior = images_string,
                 fk_vehicle_id = vehicle_id,
                 barcode = barcode_path
 
             )
-            db.add(veh_images)
+            db.add(veh_images_int)
             db.commit()
-            db.refresh(veh_images)
+            db.refresh(veh_images_int)
         else:
-            veh_images = Images(
+            veh_images_int = Images(
                 fk_vehicle_id = vehicle_id,
                 barcode = barcode_path
 
             )
-            db.add(veh_images)
+            db.add(veh_images_int)
             db.commit()
-            db.refresh(veh_images)
+            db.refresh(veh_images_int)
 
+        
+        # Save image files to the uploads directory
+        if image_exterior is not None:
+            for img in image_exterior:
+                # img.filename = str(vehicle_id) + img.filename
+                img.filename = format_image_name_ext(vehicle_id, img.filename)
 
+                print(img.filename)
+                file_location = os.path.join(UPLOAD_DIR_INT, img.filename)
+                with open(file_location, "wb") as buffer:
+                    shutil.copyfileobj(img.file, buffer)
+                print(file_location)
+                image_path_ext.append(file_location)
+
+            # Convert list of paths to a comma-separated string
+            images_string_ext = ",".join(image_path_ext)
+
+            veh_images_ext = Images(
+                image_exterior = images_string_ext,
+                fk_vehicle_id = vehicle_id,
+                barcode = barcode_path
+
+            )
+            db.add(veh_images_ext)
+            db.commit()
+            db.refresh(veh_images_ext)
+            
         # Save video files to the uploads directory
         if video is not None:
             for vid in video:
                 vid.filename = str(vehicle_id) + vid.filename
-                file_location = os.path.join(UPLOAD_DIR, vid.filename)
+                file_location = os.path.join(UPLOAD_DIR_INT, vid.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(vid.file, buffer)
                 image_paths.append(file_location)

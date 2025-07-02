@@ -11,7 +11,7 @@ import os
 import shutil
 from app.db.models import *
 from app.db.models import User as ModelUser
-
+from sqlalchemy import or_
 router = APIRouter()
 # Signin API for entering into the application
 
@@ -61,8 +61,18 @@ def disp_vehicles( request: Request,authorization: str = Header(None),db: Sessio
 
         vehicles = []
         for veh in data:
-            # Query to get associated images and videos
-            images = db.query(Images).filter(Images.fk_vehicle_id == veh.id).all()
+
+            images = db.query(Images).filter(
+            Images.fk_vehicle_id == veh.id,
+            or_(
+                Images.image_interior.isnot(None),
+                Images.image_exterior.isnot(None)
+                )
+            ).all()
+
+            # Then you can separate them:
+            interior_images = [img.image_interior for img in images if img.image_interior]
+            exterior_images = [img.image_exterior for img in images if img.image_exterior]
             videos = db.query(Videos).filter(Videos.fk_vehicle_id == veh.id).all()
             interior = db.query(VehicleInterior).filter(VehicleInterior.fk_vehicle_id == veh.id).first()
             safety = db.query(VehicleSafety).filter(VehicleSafety.fk_vehicle_id == veh.id).first()
@@ -72,27 +82,34 @@ def disp_vehicles( request: Request,authorization: str = Header(None),db: Sessio
             engine = db.query(EngineTransmisison).filter(EngineTransmisison.fk_vehicle_id == veh.id).first()
 
             image_urls = []
+            int_image_urls = []
+            ext_image_urls = []
             video_urls = []
             
             # Retrieve image paths and convert to accessible URLs
-            if images is not None:
-                for img in images:
-                    if img.image:
-                        image_paths = img.image.split(",")  # Split comma-separated file paths
-                        # Construct URLs to access the images
-                        image_urls = [f"{request.base_url}uploads/vehicles/{os.path.basename(path)}" for path in image_paths]
-                    else:
-                        image_urls = []
-                        
-            if videos is not None:
-                # Retrieve video paths and handle similarly if needed
-                for vid in videos:
-                    if vid.video:
-                        video_paths = vid.video.split(",")
-                        # Construct URLs to access the videos
-                        video_urls = [f"{request.base_url}uploads/vehicles/{os.path.basename(path)}" for path in video_paths]
-                    else:
-                        video_urls = []
+            if interior_images is not None:
+                # Process interior images
+                for img_path in interior_images:
+                    if img_path:  # Check if path exists
+                        image_paths = img_path.split(",")  # Split comma-separated paths
+                        int_image_urls.extend([
+                            f"{request.base_url}uploads/vehicles/interior/{os.path.basename(path.strip())}" 
+                            for path in image_paths if path.strip()
+                        ])
+
+
+            if exterior_images is not None:
+                # Process exterior images
+                for img_path in exterior_images:
+                    if img_path:  # Check if path exists
+                        image_paths = img_path.split(",")  # Split comma-separated paths
+                        ext_image_urls.extend([
+                            f"{request.base_url}uploads/vehicles/exterior/{os.path.basename(path.strip())}" 
+                            for path in image_paths if path.strip()
+                        ])        
+
+            image_urls.extend(ext_image_urls)
+            image_urls.extend(int_image_urls)
 
             vehicles.append({
                 "id": veh.id,
@@ -133,6 +150,8 @@ def disp_vehicles( request: Request,authorization: str = Header(None),db: Sessio
                 "created_at": veh.created_at,
                 "updated_at": veh.updated_at,
                 "images": image_urls,  # Include constructed image URLs
+                "images_interior": int_image_urls,  # Include constructed image URLs
+                "images_exterior": ext_image_urls,  # Include constructed image URLs
                 "videos": video_urls,  # Include constructed video URLs
                 "interior":interior,
                 "safety":safety,

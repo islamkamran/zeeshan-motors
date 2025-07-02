@@ -445,7 +445,9 @@ class Images(TimestampMixin, Base):
     fk_personal_id = Column(Integer, ForeignKey("personaldetails.id"), index=True, nullable=True)
     fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=True)
     fk_container_id = Column(Integer, ForeignKey("containers.id"), index=True, nullable=True)
-    image = Column(String(2000), nullable=True)  # Make this long enough for multiple paths
+    image = Column(Text, nullable=True)  # Make this long enough for multiple paths
+    image_interior = Column(Text, nullable=True)  # Make this long enough for multiple paths
+    image_exterior = Column(Text, nullable=True)  # Make this long enough for multiple paths
     barcode = Column(String(255), nullable=True)
 
 
