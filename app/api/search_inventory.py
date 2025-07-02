@@ -15,7 +15,7 @@ def search_vehicles(request: Request,searching: SearchInventories, db: Session =
     # Search vehicles by multiple fields (type, make, model, color, price, etc.)
     vehicles = db.query(Vehicle).filter(
         and_(
-                Vehicle.status.in_(["Instock", "Outofstock"]),  # Only include instock/sold vehicles
+                Vehicle.status.in_(["Instock", "Outofstock", "New", "new", "Used", "used"]),  # Only include instock/sold vehicles
             or_(
                 Vehicle.body_type.ilike(f"%{searching.search_query}%"),
                 Vehicle.drive_type.ilike(f"%{searching.search_query}%"),
@@ -30,6 +30,7 @@ def search_vehicles(request: Request,searching: SearchInventories, db: Session =
                 Vehicle.engine_name.ilike(f"%{searching.search_query}%"),
                 Vehicle.status.ilike(f"%{searching.search_query}%"),
                 Vehicle.doors.ilike(f"%{searching.search_query}%"),
+                Vehicle.condition.ilike(f"%{searching.search_query}%"),
                 Vehicle.grade.ilike(f"%{searching.search_query}%")
             )
         )
