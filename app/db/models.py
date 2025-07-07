@@ -537,6 +537,7 @@ class Role(TimestampMixin, Base):
     right_auction_management_write = Column(Boolean, default=False)
     right_auction_management_edit = Column(Boolean, default=False)
     right_auction_management_delete = Column(Boolean, default=False)
+    right_cms = Column(Boolean, default=False)
     
     created_by = Column(String(255), index=True, nullable=True)
 

@@ -51,6 +51,7 @@ def autheticate_user(db: Session,user_record, user_data):
         right_auction_management_write = ""
         right_auction_management_edit = ""
         right_auction_management_delete = ""
+        right_cms = ""
         
         rights = db.query(Role).filter(Role.name==user_record.role).first()
         if rights is None:
@@ -80,6 +81,7 @@ def autheticate_user(db: Session,user_record, user_data):
             right_auction_management_write = "default"
             right_auction_management_edit = "default"
             right_auction_management_delete = "default"
+            right_cms = "default"
             retval = json.dumps({
                 "userid": user_record.id,
                 "username": user_record.firstname,
@@ -112,6 +114,7 @@ def autheticate_user(db: Session,user_record, user_data):
                 "right_auction_management_write":right_auction_management_write,
                 "right_auction_management_edit":right_auction_management_edit,
                 "right_auction_management_delete":right_auction_management_delete
+                "right_cms":right_cms
                 })
         else:
         # print("I am here")
@@ -147,6 +150,7 @@ def autheticate_user(db: Session,user_record, user_data):
                 "right_auction_management_write":rights.right_auction_management_write,
                 "right_auction_management_edit":rights.right_auction_management_edit,
                 "right_auction_management_delete":rights.right_auction_management_delete
+                "right_cms":rights.right_cms
             })
 
         if user_record.mfa_enabled == "yes":

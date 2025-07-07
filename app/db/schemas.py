@@ -514,6 +514,7 @@ class Roles(BaseModel):
     right_auction_management_write: Optional[bool]= False
     right_auction_management_edit: Optional[bool]= False
     right_auction_management_delete: Optional[bool]= False
+    right_cms: Optional[bool]= False
 
     class Config:
         orm_mode = True
