@@ -113,7 +113,7 @@ def autheticate_user(db: Session,user_record, user_data):
                 "right_auction_management_read":right_auction_management_read,
                 "right_auction_management_write":right_auction_management_write,
                 "right_auction_management_edit":right_auction_management_edit,
-                "right_auction_management_delete":right_auction_management_delete
+                "right_auction_management_delete":right_auction_management_delete,
                 "right_cms":right_cms
                 })
         else:
@@ -149,7 +149,7 @@ def autheticate_user(db: Session,user_record, user_data):
                 "right_auction_management_read":rights.right_auction_management_read,
                 "right_auction_management_write":rights.right_auction_management_write,
                 "right_auction_management_edit":rights.right_auction_management_edit,
-                "right_auction_management_delete":rights.right_auction_management_delete
+                "right_auction_management_delete":rights.right_auction_management_delete,
                 "right_cms":rights.right_cms
             })
 

@@ -828,7 +828,7 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
 # Updating Vehicle as a Whole including all the tables and data
 
 @router.put("/v1/user/vehicles/{vehicle_id}")
-def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = Form(None), make: str = Form(None), model: str = Form(None), year: str = Form(None), title: str = Form(None), name: str = Form(None),chassis_number: str = Form(None),mileage: str = Form(None),damage_details: str = Form(None),transmission: str = Form(None), clynder: str = Form(None), location: str = Form(None), color: str = Form(None),fuel: str = Form(None),engine: str = Form(None), status: str = Form(None),description: str = Form(None),grade: str = Form(None),score: str = Form(None),steer: str = Form(None),displacement: str = Form(None),total_price: float = Form(None),sold_price: float = Form(None),recieved_amount: float = Form(None),balance_amount: float = Form(None),auction_result: str = Form(None), condition: str = Form(None), image: list[UploadFile] = File(None), video: list[UploadFile] = File(None), drive_type: str = Form(None),doors: str = Form(None),engine_name: str = Form(None),supplier: str = Form(None),is_clear: bool = Form(None), report_status: str = Form(None), feature: str = Form(None), air_conditioner: str = Form(None), digital_odometer: str = Form(None), heater: str = Form(None),sunroof: str = Form(None),power_windows: str = Form(None),tv_led: str = Form(None), leather_seats: str = Form(None), tachometer: str = Form(None), headlight_leveler: str = Form(None), am_fm_radio: str = Form(None),climate_control: str = Form(None),armrest_console: str = Form(None),rear_seat_armrest_centre_console: str = Form(None),abs_antilock_braking: str = Form(None),child_safety_lock: str = Form(None),driver_air_bag: str = Form(None),passanger_air_bag: str = Form(None),rear_seat_air_bag: str = Form(None),curtain_air_bag: str = Form(None),power_door_lock: str = Form(None),traction_control: str = Form(None),oil_brakes: str = Form(None), air_brakes: str = Form(None),tool_kit: str = Form(None),stepney_tyre: str = Form(None),foot_parking_brake: str = Form(None),fog_lights_front: str = Form(None),alloy_rims: str = Form(None),high_deck: str = Form(None),electric_pump: str = Form(None),justlow: str = Form(None),crane_step: str = Form(None),HID_headlights: str = Form(None),rear_wiper: str = Form(None),sun_visor: str = Form(None), power_streeing: str = Form(None),push_start_smartkey: str = Form(None),keyless_entry: str = Form(None),key_start: str = Form(None),navigation: str = Form(None),remote_controller: str = Form(None),android_led: str = Form(None),bluetooth: str = Form(None),front_door_speaker: str = Form(None),rear_door_speaker: str = Form(None),rear_deck_speaker: str = Form(None),ECO_mode: str = Form(None),heated_seats: str = Form(None),power_seats: str = Form(None),power_side_mirrors: str = Form(None),electric_rearview_mirror: str = Form(None),dashboard_speakers: str = Form(None),max_length: str = Form(None),height: str = Form(None),wheel_base: str = Form(None),height_including_roof_rails: str = Form(None),luggage_capacity_seatsup: str = Form(None),luggage_capacity_seatsdown: str = Form(None),width: str = Form(None),width_including_mirrors: str = Form(None),gross_vehicle_weight: str = Form(None),max_loading_weight: str = Form(None),max_roof_load: str = Form(None),number_of_seats: str = Form(None), fuel_tank_capacity: str = Form(None),max_towing_weight_braked: str = Form(None),max_towing_weight_unbraked: str = Form(None),minimum_kerbweight: str = Form(None),turning_circle_kerb_to_kerb: str = Form(None), desmodromic_engine_technology: str = Form(None), fuel_injection: str = Form(None), lightweight_design: str = Form(None), high_performance_suspension: str = Form(None), riding_ergonomics: str = Form(None), seat: str = Form(None), instrumentation: str = Form(None), fuel_capacity: str = Form(None), high_performance_brakes: str = Form(None), high_quality_tires: str = Form(None), lighting: str = Form(None), storage: str = Form(None), security: str = Form(None), adjustable_suspension: str = Form(None), authorization: str = Header(None), db: Session = Depends(get_db)):
+def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = Form(None), make: str = Form(None), model: str = Form(None), year: str = Form(None), title: str = Form(None), name: str = Form(None),chassis_number: str = Form(None),mileage: str = Form(None),damage_details: str = Form(None),transmission: str = Form(None), clynder: str = Form(None), location: str = Form(None), color: str = Form(None),fuel: str = Form(None),engine: str = Form(None), status: str = Form(None),description: str = Form(None),grade: str = Form(None),score: str = Form(None),steer: str = Form(None),displacement: str = Form(None),total_price: float = Form(None),sold_price: float = Form(None),recieved_amount: float = Form(None),balance_amount: float = Form(None),auction_result: str = Form(None), condition: str = Form(None), image_interior: list[UploadFile] = File(None), image_exterior: list[UploadFile] = File(None), video: list[UploadFile] = File(None), drive_type: str = Form(None),doors: str = Form(None),engine_name: str = Form(None),supplier: str = Form(None),is_clear: bool = Form(None), report_status: str = Form(None), feature: str = Form(None), air_conditioner: str = Form(None), digital_odometer: str = Form(None), heater: str = Form(None),sunroof: str = Form(None),power_windows: str = Form(None),tv_led: str = Form(None), leather_seats: str = Form(None), tachometer: str = Form(None), headlight_leveler: str = Form(None), am_fm_radio: str = Form(None),climate_control: str = Form(None),armrest_console: str = Form(None),rear_seat_armrest_centre_console: str = Form(None),abs_antilock_braking: str = Form(None),child_safety_lock: str = Form(None),driver_air_bag: str = Form(None),passanger_air_bag: str = Form(None),rear_seat_air_bag: str = Form(None),curtain_air_bag: str = Form(None),power_door_lock: str = Form(None),traction_control: str = Form(None),oil_brakes: str = Form(None), air_brakes: str = Form(None),tool_kit: str = Form(None),stepney_tyre: str = Form(None),foot_parking_brake: str = Form(None),fog_lights_front: str = Form(None),alloy_rims: str = Form(None),high_deck: str = Form(None),electric_pump: str = Form(None),justlow: str = Form(None),crane_step: str = Form(None),HID_headlights: str = Form(None),rear_wiper: str = Form(None),sun_visor: str = Form(None), power_streeing: str = Form(None),push_start_smartkey: str = Form(None),keyless_entry: str = Form(None),key_start: str = Form(None),navigation: str = Form(None),remote_controller: str = Form(None),android_led: str = Form(None),bluetooth: str = Form(None),front_door_speaker: str = Form(None),rear_door_speaker: str = Form(None),rear_deck_speaker: str = Form(None),ECO_mode: str = Form(None),heated_seats: str = Form(None),power_seats: str = Form(None),power_side_mirrors: str = Form(None),electric_rearview_mirror: str = Form(None),dashboard_speakers: str = Form(None),max_length: str = Form(None),height: str = Form(None),wheel_base: str = Form(None),height_including_roof_rails: str = Form(None),luggage_capacity_seatsup: str = Form(None),luggage_capacity_seatsdown: str = Form(None),width: str = Form(None),width_including_mirrors: str = Form(None),gross_vehicle_weight: str = Form(None),max_loading_weight: str = Form(None),max_roof_load: str = Form(None),number_of_seats: str = Form(None), fuel_tank_capacity: str = Form(None),max_towing_weight_braked: str = Form(None),max_towing_weight_unbraked: str = Form(None),minimum_kerbweight: str = Form(None),turning_circle_kerb_to_kerb: str = Form(None), desmodromic_engine_technology: str = Form(None), fuel_injection: str = Form(None), lightweight_design: str = Form(None), high_performance_suspension: str = Form(None), riding_ergonomics: str = Form(None), seat: str = Form(None), instrumentation: str = Form(None), fuel_capacity: str = Form(None), high_performance_brakes: str = Form(None), high_quality_tires: str = Form(None), lighting: str = Form(None), storage: str = Form(None), security: str = Form(None), adjustable_suspension: str = Form(None), authorization: str = Header(None), db: Session = Depends(get_db)):
     try:
         bind = db.get_bind()
         if bind is None:
@@ -970,61 +970,105 @@ def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = F
                     db.commit()
                     db.refresh(notification)
         """storing images and videos"""
+        # Initialize paths
         image_paths = []
+        image_paths_int = []  # for interior images
+        image_paths_ext = []  # for exterior images
         video_paths = []
 
-        # Save image files to the uploads directory
-        if image is not None:
-            print("I have an Image")
-            for img in image:
-                # img.filename = str(vehicle_id) + img.filename
-                img.filename = format_image_name(vehicle_id, img.filename)
-                print(img.filename)
-                file_location = os.path.join(UPLOAD_DIR, img.filename)
+
+        # First check if we have an existing record
+        existing_images = db.query(Images).filter(Images.fk_vehicle_id == vehicle_id).first()
+
+        # Handle interior images
+        if image_interior is not None:
+            print("Processing interior images")
+            # Delete existing interior images if they exist
+            if existing_images and existing_images.image_interior:
+                for old_img_path in existing_images.image_interior.split(','):
+                    try:
+                        if os.path.exists(old_img_path):
+                            os.remove(old_img_path)
+                    except Exception as e:
+                        print(f"Error deleting old interior image {old_img_path}: {e}")
+    
+            # Save new interior images
+            for img in image_interior:
+                img.filename = format_image_name_int(vehicle_id, img.filename)
+                file_location = os.path.join(UPLOAD_DIR_INT, img.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
-                print(file_location)
-                image_paths.append(file_location)
-
-            # Convert list of paths to a comma-separated string
-            images_string = ",".join(image_paths)
-            print(images_string)
-            # Incase of new Image
-            veh_images = Images(
-                image = images_string,
-                fk_vehicle_id = vehicle_id
-            )
-            # Incase of updating the images
-            veh_images_update = VehImageSchema(
-                image = images_string,
-                fk_vehicle_id = vehicle_id
-            )
-
-            check_img = db.query(Images).filter(Images.fk_vehicle_id == vehicle_id).first()
-            print(f"the images: {check_img}")
-            if check_img is None:
-                print("INSIDE")
-                db.add(veh_images)
-                db.commit()
-                db.refresh(veh_images)
+                image_paths_int.append(file_location)
+    
+            images_string_int = ",".join(image_paths_int)
+    
+            if existing_images is None:
+                existing_images = Images(
+                    image_interior=images_string_int,
+                    fk_vehicle_id=vehicle_id
+                )
+                db.add(existing_images)
             else:
-                for key, value in veh_images_update.model_dump(exclude_unset=True).items():
-                    setattr(check_img, key, value)
+                existing_images.image_interior = images_string_int
+            db.commit()
+        elif image_interior is None and existing_images and existing_images.image_interior:
+            print("No interior images provided - clearing if they exist")
+            # Delete the physical files
+            for old_img_path in existing_images.image_interior.split(','):
+                try:
+                    if os.path.exists(old_img_path):
+                        os.remove(old_img_path)
+                except Exception as e:
+                    print(f"Error deleting old interior image {old_img_path}: {e}")
+    
+            existing_images.image_interior = None
+            db.commit()
 
-                db.commit()
-                db.refresh(check_img) 
-            print(2)
-        elif image is None:
-            print("I dont have an Image")
-            print("Empty Images are passed")
-            check_img = db.query(Images).filter(Images.fk_vehicle_id == vehicle_id).first()
-            print(f"the images: {check_img}")
-            if check_img is not None:
-                print("old images are here we will delete them now")
-                check_img.image = ""
-                print(f'check image: {check_img.image}')
-                db.commit()
-                db.refresh(check_img)
+        # Handle exterior images
+        if image_exterior is not None:
+            print("Processing exterior images")
+            # Delete existing exterior images if they exist
+            if existing_images and existing_images.image_exterior:
+                for old_img_path in existing_images.image_exterior.split(','):
+                    try:
+                        if os.path.exists(old_img_path):
+                            os.remove(old_img_path)
+                    except Exception as e:
+                        print(f"Error deleting old exterior image {old_img_path}: {e}")
+    
+            # Save new exterior images
+            for img in image_exterior:
+                img.filename = format_image_name_ext(vehicle_id, img.filename)
+                file_location = os.path.join(UPLOAD_DIR_EXT, img.filename)
+                with open(file_location, "wb") as buffer:
+                    shutil.copyfileobj(img.file, buffer)
+                image_paths_ext.append(file_location)
+    
+            images_string_ext = ",".join(image_paths_ext)
+    
+            if existing_images is None:
+                existing_images = Images(
+                    image_exterior=images_string_ext,
+                    fk_vehicle_id=vehicle_id
+                )
+                db.add(existing_images)
+            else:
+                existing_images.image_exterior = images_string_ext
+            db.commit()
+        elif image_exterior is None and existing_images and existing_images.image_exterior:
+            print("No exterior images provided - clearing if they exist")
+            # Delete the physical files
+            for old_img_path in existing_images.image_exterior.split(','):
+                try:
+                    if os.path.exists(old_img_path):
+                        os.remove(old_img_path)
+                except Exception as e:
+                    print(f"Error deleting old exterior image {old_img_path}: {e}")
+    
+            existing_images.image_exterior = None
+            db.commit()
+
+
         # Save video files to the uploads directory
         if video is not None:
             for vid in video:
