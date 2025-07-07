@@ -54,6 +54,10 @@ origins = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:8080",
+    "https://zeeshanmotors.com",
+    "https://www.zeeshanmotors.com",
+    "https://admin.zeeshanmotors.com",
+    "https://www.admin.zeeshanmotors.com",
     "http://ec2-13-210-175-115.ap-southeast-2.compute.amazonaws.com:4001",
     "http://ec2-13-210-175-115.ap-southeast-2.compute.amazonaws.com:3001",
 ]
