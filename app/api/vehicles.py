@@ -27,6 +27,7 @@ import requests
 from datetime import datetime
 
 EXPORT_DIR = "exports/"  # Directory to save the file
+UPLOAD_DIR = "uploads/vehicles"
 UPLOAD_DIR_INT = "uploads/vehicles/interior"  # Ensure this directory exists
 UPLOAD_DIR_EXT = "uploads/vehicles/exterior"  # Ensure this directory exists
 
@@ -94,71 +95,54 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
         print(f"The path of barcode: {barcode_path}")
 
         """storing images and videos"""
-        image_paths = []
-        image_path_ext = []
-        video_paths = []
+        # Initialize paths
+        image_paths_int = []  # for interior images
+        image_paths_ext = []  # for exterior images
+        videos_path = []
+        # First check if a record already exists for this vehicle
+        existing_images = db.query(Images).filter(Images.fk_vehicle_id == vehicle_id).first()
 
         # Save interior images files to the uploads directory
         if image_interior is not None:
             for img in image_interior:
-                # img.filename = str(vehicle_id) + img.filename
                 img.filename = format_image_name_int(vehicle_id, img.filename)
-
-                print(img.filename)
-                file_location = os.path.join(UPLOAD_DIR_EXT, img.filename)
-                with open(file_location, "wb") as buffer:
-                    shutil.copyfileobj(img.file, buffer)
-                print(file_location)
-                image_paths.append(file_location)
-
-            # Convert list of paths to a comma-separated string
-            images_string = ",".join(image_paths)
-
-            veh_images_int = Images(
-                image_interior = images_string,
-                fk_vehicle_id = vehicle_id,
-                barcode = barcode_path
-
-            )
-            db.add(veh_images_int)
-            db.commit()
-            db.refresh(veh_images_int)
-        else:
-            veh_images_int = Images(
-                fk_vehicle_id = vehicle_id,
-                barcode = barcode_path
-
-            )
-            db.add(veh_images_int)
-            db.commit()
-            db.refresh(veh_images_int)
-
-        
-        # Save image files to the uploads directory
-        if image_exterior is not None:
-            for img in image_exterior:
-                # img.filename = str(vehicle_id) + img.filename
-                img.filename = format_image_name_ext(vehicle_id, img.filename)
-
-                print(img.filename)
                 file_location = os.path.join(UPLOAD_DIR_INT, img.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
-                print(file_location)
-                image_path_ext.append(file_location)
+                image_paths_int.append(file_location)
+            images_string_int = ",".join(image_paths_int)
 
-            # Convert list of paths to a comma-separated string
-            images_string_ext = ",".join(image_path_ext)
+        # Save exterior images files to the uploads directory
+        if image_exterior is not None:
+            for img in image_exterior:
+                img.filename = format_image_name_ext(vehicle_id, img.filename)
+                file_location = os.path.join(UPLOAD_DIR_EXT, img.filename)
+                with open(file_location, "wb") as buffer:
+                    shutil.copyfileobj(img.file, buffer)
+                image_paths_ext.append(file_location)
+            images_string_ext = ",".join(image_paths_ext)
 
-            veh_images_ext = Images(
-                image_exterior = images_string_ext,
-                fk_vehicle_id = vehicle_id,
-                barcode = barcode_path
-
+        # Create or update the single database record
+        if existing_images is None:
+            # Create new record with all provided data
+            new_images = Images(
+                image_interior=images_string_int if image_interior is not None else None,
+                image_exterior=images_string_ext if image_exterior is not None else None,
+                fk_vehicle_id=vehicle_id,
+                barcode=barcode_path
             )
-            db.add(veh_images_ext)
-            db.commit()
-            db.refresh(veh_images_ext)
+            db.add(new_images)
+        else:
+            # Update existing record with new data
+            if image_interior is not None:
+                existing_images.image_interior = images_string_int
+            if image_exterior is not None:
+                existing_images.image_exterior = images_string_ext
+            if barcode_path is not None:
+                existing_images.barcode = barcode_path
+
+        db.commit()
+        db.refresh(existing_images if existing_images else new_images)
             
         # Save video files to the uploads directory
         if video is not None:
@@ -167,10 +151,10 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
                 file_location = os.path.join(UPLOAD_DIR_INT, vid.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(vid.file, buffer)
-                image_paths.append(file_location)
+                videos_path.append(file_location)
 
             # Convert list of paths to a comma-separated string
-            videos_string = ",".join(image_paths)
+            videos_string = ",".join(videos_path)
 
             veh_video = Videos(
                 video = videos_string,
@@ -1071,33 +1055,41 @@ def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = F
 
         # Save video files to the uploads directory
         if video is not None:
+            video_paths = []  # Create a separate list for video paths
+    
+            # First check if we have existing videos
+            existing_videos = db.query(Videos).filter(Videos.fk_vehicle_id == vehicle_id).first()
+    
+            # Delete existing video files if they exist
+            if existing_videos and existing_videos.video:
+                for old_vid_path in existing_videos.video.split(','):
+                    try:
+                        if os.path.exists(old_vid_path):
+                            os.remove(old_vid_path)
+                    except Exception as e:
+                        print(f"Error deleting old video {old_vid_path}: {e}")
+    
+            # Save new videos
             for vid in video:
                 vid.filename = str(vehicle_id) + vid.filename
                 file_location = os.path.join(UPLOAD_DIR, vid.filename)
                 with open(file_location, "wb") as buffer:
                     shutil.copyfileobj(vid.file, buffer)
-                image_paths.append(file_location)
-
-            # Convert list of paths to a comma-separated string
-            videos_string = ",".join(image_paths)
-
-            veh_video = VehVideoSchema(
-                video = videos_string,
-                fk_vehicle_id = vehicle_id
-            )
-
-            check_video = db.query(Videos).filter(Videos.fk_vehicle_id == vehicle_id).first()
-            
-            if check_video is None:
-                db.add(veh_video)
-                db.commit()
-                db.refresh(veh_video)
+                video_paths.append(file_location)
+    
+            videos_string = ",".join(video_paths)
+    
+            # Use the actual model class (Videos) instead of the schema
+            if existing_videos is None:
+                new_video = Videos(  # This should be your SQLAlchemy model class
+                    video=videos_string,
+                    fk_vehicle_id=vehicle_id
+                )
+                db.add(new_video)
             else:
-                for key, value in veh_video.model_dump(exclude_unset=True).items():
-                    setattr(check_video, key, value)
-
-                db.commit()
-                db.refresh(check_video) 
+                existing_videos.video = videos_string
+    
+            db.commit()
             print(3)
 
         """Adding the features to interior table"""
