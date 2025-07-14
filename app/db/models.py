@@ -147,7 +147,8 @@ class Vehicle(TimestampMixin, Base):
     transmission = Column(String(55), nullable=True)
     clynder = Column(String(55), nullable=True)
     location = Column(String(256), nullable=True)
-    color = Column(String(55), nullable=True)
+    intcolor = Column(String(55), nullable=True)
+    extcolor = Column(String(55), nullable=True)
     fuel = Column(String(55), nullable=True)
     engine = Column(String(55), nullable=True)
     status = Column(String(55), nullable=True)
@@ -172,6 +173,8 @@ class Vehicle(TimestampMixin, Base):
     feature = Column(String(55), nullable=True)
     sold_by = Column(String(55), nullable=True)
     uploaded_by = Column(String(55), nullable=True)
+    motor = Column(String(55), nullable=True)
+
     
 
 class VehicleInterior(TimestampMixin, Base):
@@ -299,13 +302,18 @@ class VehicleTransmission(TimestampMixin, Base):
     # created_at = Column(DateTime, server_default=func.now(), nullable=False)
     # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
-class VehicleColor(TimestampMixin, Base):
-    __tablename__ = "vehiclecolor"
+class VehicleInteriorColor(TimestampMixin, Base):
+    __tablename__ = "vehicleinteriorcolor"
     id = Column(Integer, primary_key=True, index=True)
-    vehcolor = Column(String(100), nullable=True)
+    vehintcolor = Column(String(100), nullable=True)
     # created_at = Column(DateTime, server_default=func.now(), nullable=False)
     # updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
+
+class VehicleExteriorColor(TimestampMixin, Base):
+    __tablename__ = "vehicleexteriorcolor"
+    id = Column(Integer, primary_key=True, index=True)
+    vehextcolor = Column(String(100), nullable=True)
 
 class BidWon(TimestampMixin, Base):
     __tablename__ = "bidwon"

@@ -216,8 +216,11 @@ class InventoryRetails(BaseModel):
 class VehTransmission(BaseModel):
     vehtransmission: Optional[str]=None
 
-class VehColor(BaseModel):
-    vehcolor: Optional[str]=None
+class VehIntColor(BaseModel):
+    vehintcolor: Optional[str]=None
+
+class VehExtColor(BaseModel):
+    vehextcolor: Optional[str]=None
 
 class VehDisplacement(BaseModel):
     vehdisplacement: Optional[str]=None
@@ -247,7 +250,8 @@ class Vehicles(BaseModel):
     transmission: Optional[str] = None
     clynder: Optional[str] = None
     location: Optional[str] = None
-    color: Optional[str] = None
+    intcolor: Optional[str] = None
+    extcolor: Optional[str] = None
     fuel: Optional[str] = None
     engine: Optional[str] = None
     status: Optional[str] = None
@@ -268,6 +272,7 @@ class Vehicles(BaseModel):
     is_clear: Optional[bool]= None
     report_status: Optional[str]= None
     feature: Optional[str]= None
+    motor: Optional[str]= None
 
 class PublishVehicle(Vehicles):
     uploaded_by: Optional[str]= None

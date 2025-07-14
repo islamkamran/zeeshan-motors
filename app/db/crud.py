@@ -561,8 +561,15 @@ def create_trans(db: Session, data):
     db.refresh(new_trans)
     return new_trans.id
 
-def create_clr(db: Session, data):
-    new_color = VehicleColor(**data.dict())
+def create_int_clr(db: Session, data):
+    new_color = VehicleInteriorColor(**data.dict())
+    db.add(new_color)
+    db.commit()
+    db.refresh(new_color)
+    return new_color.id
+
+def create_ext_clr(db: Session, data):
+    new_color = VehicleExteriorColor(**data.dict())
     db.add(new_color)
     db.commit()
     db.refresh(new_color)

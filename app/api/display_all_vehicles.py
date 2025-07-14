@@ -126,7 +126,8 @@ def disp_vehicles( request: Request,authorization: str = Header(None),db: Sessio
                 "transmission":  veh.transmission,
                 "clynder": veh.clynder,
                 "location": veh.location,
-                "color": veh.color,
+                "intcolor": veh.intcolor,
+                "extcolor": veh.extcolor,
                 "fuel": veh.fuel,
                 "engine":veh.engine,
                 "status": veh.status,
@@ -147,6 +148,7 @@ def disp_vehicles( request: Request,authorization: str = Header(None),db: Sessio
                 "is_clear": veh.is_clear,
                 "report_status": veh.report_status,
                 "feature": veh.feature,
+                "motor": veh.motor,
                 "created_at": veh.created_at,
                 "updated_at": veh.updated_at,
                 "images": image_urls,  # Include constructed image URLs
