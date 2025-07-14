@@ -57,6 +57,28 @@ class VehInterior(BaseModel):
     climate_control: Optional[bool] = None
     armrest_console: Optional[bool] = None
     rear_seat_armrest_centre_console: Optional[bool] = None
+    ambient_lighting_mood_lighting: Optional[bool] = None
+    digital_instrument_cluster: Optional[bool] = None
+    head_up_display: Optional[bool] = None
+    wireless_charging_pad: Optional[bool] = None
+    multi_zone_climate_control: Optional[bool] = None
+    premium_sound_system: Optional[bool] = None
+    wood_interior: Optional[bool] = None
+    aluminum_tri_interior: Optional[bool] = None
+    ventilated_seats: Optional[bool] = None
+    panoramic_sunroof: Optional[bool] = None
+    rear_entertainment_screens: Optional[bool] = None
+    power_adjustable_steering_column: Optional[bool] = None
+    memory_seats: Optional[bool] = None
+    alcantara_carbon_fiber_trim: Optional[bool] = None
+    alarm: Optional[bool] = None
+    cooled_rear_seat: Optional[bool] = None
+    wireless_smartphone_charger: Optional[bool] = None
+    usb_type_c_port: Optional[bool] = None
+    usb_20_port: Optional[bool] = None
+    v12_power_outlet: Optional[bool] = None
+    rear_charging_ports: Optional[bool] = None
+    
     class Config:
         orm_mode = True
 
@@ -74,6 +96,26 @@ class VehSafety(BaseModel):
     tool_kit: Optional[bool] = None
     stepney_tyre: Optional[bool] = None
     foot_parking_brake: Optional[bool] = None
+    adaptive_cruise_control: Optional[bool] = None
+    blind_spot_monitoring: Optional[bool] = None
+    lane_keep_assist: Optional[bool] = None
+    lane_departure_warning: Optional[bool] = None
+    degree_360_camera: Optional[bool] = None
+    front_rear_parking_sensors: Optional[bool] = None
+    automatic_emergency_braking: Optional[bool] = None
+    pedestrian_detection: Optional[bool] = None
+    cross_traffic_alert_rear: Optional[bool] = None
+    driver_attention_warning: Optional[bool] = None
+    night_vision_assist: Optional[bool] = None
+    tire_pressure_monitoring_system: Optional[bool] = None
+    collision_mitigation_system: Optional[bool] = None
+    isofix_child_seat_mounts: Optional[bool] = None
+    adaptive_lighting: Optional[bool] = None
+    performance_kit_tuned: Optional[bool] = None
+    parking_button: Optional[bool] = None
+    manual_handbrake: Optional[bool] = None
+    electronic_parking_brake_auto_hold: Optional[bool] = None
+
     class Config:
         orm_mode = True
 
@@ -87,6 +129,26 @@ class VehExterior(BaseModel):
     HID_headlights: Optional[bool] = None
     rear_wiper: Optional[bool] = None
     sun_visor: Optional[bool] = None
+    matrix_led_laser_headlights: Optional[bool] = None
+    automatic_headlight_on_off: Optional[bool] = None
+    power_tailgate: Optional[bool] = None
+    roof_rails_roof_rack: Optional[bool] = None
+    dual_exhaust_pipes: Optional[bool] = None
+    sport_exhaust: Optional[bool] = None
+    rear_spoiler: Optional[bool] = None
+    led_dlrs_daytime_running_lights: Optional[bool] = None
+    auto_folding_side_mirrors: Optional[bool] = None
+    frameless_doors: Optional[bool] = None
+    charging_port: Optional[bool] = None
+    soft_close_doors: Optional[bool] = None
+    illuminated_logo_welcome_lights: Optional[bool] = None
+    rain_sensing_wipers: Optional[bool] = None
+    Performance_tyres: Optional[bool] = None
+    side_mirrors_indicators: Optional[bool] = None
+    sports_suspension: Optional[bool] = None
+    premium_paint: Optional[bool] = None
+    air_deflector: Optional[bool] = None
+
     class Config:
         orm_mode = True
 
@@ -108,6 +170,31 @@ class ComfortConvenience(BaseModel):
     power_side_mirrors: Optional[bool] = None
     electric_rearview_mirror: Optional[bool] = None
     dashboard_speakers: Optional[bool] = None
+    wireless_apple_carplay_android_auto: Optional[bool] = None
+    voice_control_system: Optional[bool] = None
+    gesture_control: Optional[bool] = None
+    remote_engine_start: Optional[bool] = None
+    auto_dimming_rearview_mirror: Optional[bool] = None
+    driver_seat_massager: Optional[bool] = None
+    rear_window_sunshade_manual: Optional[bool] = None
+    rear_window_sunshade_electric: Optional[bool] = None
+    air_purifier_ionizer: Optional[bool] = None
+    cabin_noise_cancellation: Optional[bool] = None
+    smart_climate_control_ai_sensing: Optional[bool] = None
+    ota_updates_over_the_air_software: Optional[bool] = None
+    sports_drive_mode: Optional[bool] = None
+    comfort_drive_mode: Optional[bool] = None
+    snow_drive_mode: Optional[bool] = None
+    intelligent_parking_assist_auto_park: Optional[bool] = None
+    digital_key_smartphone: Optional[bool] = None
+    electric_rear_seat_recline: Optional[bool] = None
+    navigation_system: Optional[bool] = None
+    power_locks: Optional[bool] = None
+    tinted_windows: Optional[bool] = None
+    rear_tv_screens: Optional[bool] = None
+    cd_dvd_player: Optional[bool] = None
+    mp3_interface: Optional[bool] = None
+
     class Config:
         orm_mode = True
 
@@ -571,7 +658,7 @@ class PricingData(BaseModel):
         orm_mode = True
 
 
-class   ContainerBase(BaseModel):
+class ContainerBase(BaseModel):
     shipper: Optional[str] = None
     shipping_company: Optional[str] = None
     bl_number: Optional[str] = None
