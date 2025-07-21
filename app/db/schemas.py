@@ -54,7 +54,6 @@ class VehInterior(BaseModel):
     tachometer: Optional[bool] = None
     headlight_leveler: Optional[bool] = None
     am_fm_radio: Optional[bool] = None
-    climate_control: Optional[bool] = None
     armrest_console: Optional[bool] = None
     rear_seat_armrest_centre_console: Optional[bool] = None
     ambient_lighting_mood_lighting: Optional[bool] = None
