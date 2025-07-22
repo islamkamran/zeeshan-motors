@@ -1290,7 +1290,6 @@ def vehicles(fk_bl_number: str = Form(None), body_type: str = Form(None), make: 
         dimension_id = register_dimension(db, user_id, vehicle_id, DimensionCap(**dimension_data))
 
 
-
         """Adding the features to engine table"""
 
         engine_data = EngineTrans(fuel_tank_capacity=fuel_tank_capacity,max_towing_weight_braked=max_towing_weight_braked,max_towing_weight_unbraked=max_towing_weight_unbraked,minimum_kerbweight=minimum_kerbweight,turning_circle_kerb_to_kerb=turning_circle_kerb_to_kerb)
@@ -1853,10 +1852,178 @@ def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = F
             else:
                 raise HTTPException(status_code=400, detail="Invalid boolean value for rear_seat_armrest_centre_console")
 
+        if ambient_lighting_mood_lighting is not None:
+            if ambient_lighting_mood_lighting.lower() in ["true", "1"]:
+                ambient_lighting_mood_lighting = True
+            elif ambient_lighting_mood_lighting.lower() in ["false", "0"]:
+                ambient_lighting_mood_lighting = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for ambient_lighting_mood_lighting")
+
+        if digital_instrument_cluster is not None:
+            if digital_instrument_cluster.lower() in ["true", "1"]:
+                digital_instrument_cluster = True
+            elif digital_instrument_cluster.lower() in ["false", "0"]:
+                digital_instrument_cluster = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for digital_instrument_cluster")
+
+        if head_up_display is not None:
+            if head_up_display.lower() in ["true", "1"]:
+                head_up_display = True
+            elif head_up_display.lower() in ["false", "0"]:
+                head_up_display = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for head_up_display")
+            
+        if wireless_charging_pad is not None:
+            if wireless_charging_pad.lower() in ["true", "1"]:
+                wireless_charging_pad = True
+            elif wireless_charging_pad.lower() in ["false", "0"]:
+                wireless_charging_pad = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for wireless_charging_pad")
+            
+        if multi_zone_climate_control is not None:
+            if multi_zone_climate_control.lower() in ["true", "1"]:
+                multi_zone_climate_control = True
+            elif multi_zone_climate_control.lower() in ["false", "0"]:
+                multi_zone_climate_control = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for multi_zone_climate_control")
+            
+        if premium_sound_system is not None:
+            if premium_sound_system.lower() in ["true", "1"]:
+                premium_sound_system = True
+            elif premium_sound_system.lower() in ["false", "0"]:
+                premium_sound_system = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for premium_sound_system")
+            
+        if wood_interior is not None:
+            if wood_interior.lower() in ["true", "1"]:
+                wood_interior = True
+            elif wood_interior.lower() in ["false", "0"]:
+                wood_interior = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for wood_interior")
+            
+        if aluminum_tri_interior is not None:
+            if aluminum_tri_interior.lower() in ["true", "1"]:
+                aluminum_tri_interior = True
+            elif aluminum_tri_interior.lower() in ["false", "0"]:
+                aluminum_tri_interior = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for aluminum_tri_interior")
+            
+        if ventilated_seats is not None:
+            if ventilated_seats.lower() in ["true", "1"]:
+                ventilated_seats = True
+            elif ventilated_seats.lower() in ["false", "0"]:
+                ventilated_seats = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for ventilated_seats")
+            
+        if panoramic_sunroof is not None:
+            if panoramic_sunroof.lower() in ["true", "1"]:
+                panoramic_sunroof = True
+            elif panoramic_sunroof.lower() in ["false", "0"]:
+                panoramic_sunroof = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for panoramic_sunroof")
+            
+        if rear_entertainment_screens is not None:
+            if rear_entertainment_screens.lower() in ["true", "1"]:
+                rear_entertainment_screens = True
+            elif rear_entertainment_screens.lower() in ["false", "0"]:
+                rear_entertainment_screens = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rear_entertainment_screens")
+            
+        if power_adjustable_steering_column is not None:
+            if power_adjustable_steering_column.lower() in ["true", "1"]:
+                power_adjustable_steering_column = True
+            elif power_adjustable_steering_column.lower() in ["false", "0"]:
+                power_adjustable_steering_column = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for power_adjustable_steering_column")
+            
+        if memory_seats is not None:
+            if memory_seats.lower() in ["true", "1"]:
+                memory_seats = True
+            elif memory_seats.lower() in ["false", "0"]:
+                memory_seats = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for memory_seats")
+            
+        if alcantara_carbon_fiber_trim is not None:
+            if alcantara_carbon_fiber_trim.lower() in ["true", "1"]:
+                alcantara_carbon_fiber_trim = True
+            elif alcantara_carbon_fiber_trim.lower() in ["false", "0"]:
+                alcantara_carbon_fiber_trim = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for alcantara_carbon_fiber_trim")
+            
+        if alarm is not None:
+            if alarm.lower() in ["true", "1"]:
+                alarm = True
+            elif alarm.lower() in ["false", "0"]:
+                alarm = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for alarm")
+            
+        if cooled_rear_seat is not None:
+            if cooled_rear_seat.lower() in ["true", "1"]:
+                cooled_rear_seat = True
+            elif cooled_rear_seat.lower() in ["false", "0"]:
+                cooled_rear_seat = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for cooled_rear_seat")
+            
+        if wireless_smartphone_charger is not None:
+            if wireless_smartphone_charger.lower() in ["true", "1"]:
+                wireless_smartphone_charger = True
+            elif wireless_smartphone_charger.lower() in ["false", "0"]:
+                wireless_smartphone_charger = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for wireless_smartphone_charger")
+            
+        if usb_type_c_port is not None:
+            if usb_type_c_port.lower() in ["true", "1"]:
+                usb_type_c_port = True
+            elif usb_type_c_port.lower() in ["false", "0"]:
+                usb_type_c_port = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for usb_type_c_port")
+            
+        if usb_20_port is not None:
+            if usb_20_port.lower() in ["true", "1"]:
+                usb_20_port = True
+            elif usb_20_port.lower() in ["false", "0"]:
+                usb_20_port = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for usb_20_port")
+            
+        if v12_power_outlet is not None:
+            if v12_power_outlet.lower() in ["true", "1"]:
+                v12_power_outlet = True
+            elif v12_power_outlet.lower() in ["false", "0"]:
+                v12_power_outlet = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for v12_power_outlet")
+            
+        if rear_charging_ports is not None:
+            if rear_charging_ports.lower() in ["true", "1"]:
+                rear_charging_ports = True
+            elif rear_charging_ports.lower() in ["false", "0"]:
+                rear_charging_ports = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rear_charging_ports")
+            
 
         # All data converted to boolean now storing the data in the table
         check_intr = db.query(VehicleInterior).filter(VehicleInterior.fk_vehicle_id == vehicle_id).first()
-        interior_data = VehInterior(air_conditioner=air_conditioner,digital_odometer=digital_odometer,heater=heater,sunroof=sunroof,power_windows=power_windows,tv_led=tv_led,leather_seats=leather_seats,tachometer=tachometer,headlight_leveler=headlight_leveler,am_fm_radio=am_fm_radio,armrest_console=armrest_console,rear_seat_armrest_centre_console=rear_seat_armrest_centre_console)
+        interior_data = VehInterior(air_conditioner=air_conditioner,digital_odometer=digital_odometer,heater=heater,sunroof=sunroof,power_windows=power_windows,tv_led=tv_led,leather_seats=leather_seats,tachometer=tachometer,headlight_leveler=headlight_leveler,am_fm_radio=am_fm_radio,armrest_console=armrest_console,rear_seat_armrest_centre_console=rear_seat_armrest_centre_console,ambient_lighting_mood_lighting=ambient_lighting_mood_lighting,digital_instrument_cluster=digital_instrument_cluster,head_up_display=head_up_display,wireless_charging_pad=wireless_charging_pad,multi_zone_climate_control=multi_zone_climate_control, premium_sound_system=premium_sound_system, wood_interior=wood_interior, aluminum_tri_interior=aluminum_tri_interior, ventilated_seats=ventilated_seats, panoramic_sunroof=panoramic_sunroof, rear_entertainment_screens=rear_entertainment_screens, power_adjustable_steering_column=power_adjustable_steering_column, memory_seats=memory_seats, alcantara_carbon_fiber_trim=alcantara_carbon_fiber_trim, alarm=alarm, cooled_rear_seat=cooled_rear_seat, wireless_smartphone_charger=wireless_smartphone_charger, usb_type_c_port=usb_type_c_port, usb_20_port=usb_20_port, v12_power_outlet=v12_power_outlet, rear_charging_ports=rear_charging_ports)
         
         for key, value in interior_data.model_dump(exclude_unset=True).items():
             setattr(check_intr, key, value)
@@ -1970,10 +2137,164 @@ def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = F
                 foot_parking_brake = False
             else:
                 raise HTTPException(status_code=400, detail="Invalid boolean value for foot_parking_brake")
-                
+
+            
+        if adaptive_cruise_control is not None:
+            if adaptive_cruise_control.lower() in ["true", "1"]:
+                foot_parkadaptive_cruise_controling_brake = True
+            elif adaptive_cruise_control.lower() in ["false", "0"]:
+                adaptive_cruise_control = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for adaptive_cruise_control")
+            
+        if blind_spot_monitoring is not None:
+            if blind_spot_monitoring.lower() in ["true", "1"]:
+                blind_spot_monitoring = True
+            elif blind_spot_monitoring.lower() in ["false", "0"]:
+                blind_spot_monitoring = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for blind_spot_monitoring")
+            
+        if lane_keep_assist is not None:
+            if lane_keep_assist.lower() in ["true", "1"]:
+                lane_keep_assist = True
+            elif lane_keep_assist.lower() in ["false", "0"]:
+                lane_keep_assist = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for lane_keep_assist")
+            
+        if lane_departure_warning is not None:
+            if lane_departure_warning.lower() in ["true", "1"]:
+                lane_departure_warning = True
+            elif lane_departure_warning.lower() in ["false", "0"]:
+                lane_departure_warning = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for lane_departure_warning")
+            
+        if degree_360_camera is not None:
+            if degree_360_camera.lower() in ["true", "1"]:
+                degree_360_camera = True
+            elif degree_360_camera.lower() in ["false", "0"]:
+                degree_360_camera = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for degree_360_camera")
+            
+        if front_rear_parking_sensors is not None:
+            if front_rear_parking_sensors.lower() in ["true", "1"]:
+                front_rear_parking_sensors = True
+            elif front_rear_parking_sensors.lower() in ["false", "0"]:
+                front_rear_parking_sensors = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for front_rear_parking_sensors")
+            
+        if automatic_emergency_braking is not None:
+            if automatic_emergency_braking.lower() in ["true", "1"]:
+                automatic_emergency_braking = True
+            elif automatic_emergency_braking.lower() in ["false", "0"]:
+                automatic_emergency_braking = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for automatic_emergency_braking")
+            
+        if pedestrian_detection is not None:
+            if pedestrian_detection.lower() in ["true", "1"]:
+                pedestrian_detection = True
+            elif pedestrian_detection.lower() in ["false", "0"]:
+                pedestrian_detection = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for pedestrian_detection")
+            
+        if cross_traffic_alert_rear is not None:
+            if cross_traffic_alert_rear.lower() in ["true", "1"]:
+                cross_traffic_alert_rear = True
+            elif cross_traffic_alert_rear.lower() in ["false", "0"]:
+                cross_traffic_alert_rear = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for cross_traffic_alert_rear")
+            
+        if driver_attention_warning is not None:
+            if driver_attention_warning.lower() in ["true", "1"]:
+                driver_attention_warning = True
+            elif driver_attention_warning.lower() in ["false", "0"]:
+                driver_attention_warning = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for driver_attention_warning")
+            
+        if night_vision_assist is not None:
+            if night_vision_assist.lower() in ["true", "1"]:
+                night_vision_assist = True
+            elif night_vision_assist.lower() in ["false", "0"]:
+                night_vision_assist = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for night_vision_assist")
+            
+        if tire_pressure_monitoring_system is not None:
+            if tire_pressure_monitoring_system.lower() in ["true", "1"]:
+                tire_pressure_monitoring_system = True
+            elif tire_pressure_monitoring_system.lower() in ["false", "0"]:
+                tire_pressure_monitoring_system = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for tire_pressure_monitoring_system")
+            
+        if collision_mitigation_system is not None:
+            if collision_mitigation_system.lower() in ["true", "1"]:
+                collision_mitigation_system = True
+            elif collision_mitigation_system.lower() in ["false", "0"]:
+                collision_mitigation_system = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for collision_mitigation_system")
+            
+        if isofix_child_seat_mounts is not None:
+            if isofix_child_seat_mounts.lower() in ["true", "1"]:
+                isofix_child_seat_mounts = True
+            elif isofix_child_seat_mounts.lower() in ["false", "0"]:
+                isofix_child_seat_mounts = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for isofix_child_seat_mounts")
+            
+        if adaptive_lighting is not None:
+            if adaptive_lighting.lower() in ["true", "1"]:
+                adaptive_lighting = True
+            elif adaptive_lighting.lower() in ["false", "0"]:
+                adaptive_lighting = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for adaptive_lighting")
+            
+        if performance_kit_tuned is not None:
+            if performance_kit_tuned.lower() in ["true", "1"]:
+                performance_kit_tuned = True
+            elif performance_kit_tuned.lower() in ["false", "0"]:
+                performance_kit_tuned = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for performance_kit_tuned")
+            
+        if parking_button is not None:
+            if parking_button.lower() in ["true", "1"]:
+                parking_button = True
+            elif parking_button.lower() in ["false", "0"]:
+                parking_button = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for parking_button")
+            
+        if manual_handbrake is not None:
+            if manual_handbrake.lower() in ["true", "1"]:
+                manual_handbrake = True
+            elif manual_handbrake.lower() in ["false", "0"]:
+                manual_handbrake = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for manual_handbrake")
+            
+        if electronic_parking_brake_auto_hold is not None:
+            if electronic_parking_brake_auto_hold.lower() in ["true", "1"]:
+                electronic_parking_brake_auto_hold = True
+            elif electronic_parking_brake_auto_hold.lower() in ["false", "0"]:
+                electronic_parking_brake_auto_hold = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for electronic_parking_brake_auto_hold")
+
+
         # All data converted to boolean now storing the data in the table
         check_safety = db.query(VehicleSafety).filter(VehicleSafety.fk_vehicle_id == vehicle_id).first()       
-        safety_data = VehSafety(abs_antilock_braking=abs_antilock_braking,child_safety_lock=child_safety_lock,driver_air_bag=driver_air_bag,passanger_air_bag=passanger_air_bag,rear_seat_air_bag=rear_seat_air_bag,curtain_air_bag=curtain_air_bag,power_door_lock=power_door_lock,traction_control=traction_control,oil_brakes=oil_brakes,air_brakes=air_brakes,tool_kit=tool_kit,stepney_tyre=stepney_tyre,foot_parking_brake=foot_parking_brake)
+        safety_data = VehSafety(abs_antilock_braking=abs_antilock_braking,child_safety_lock=child_safety_lock,driver_air_bag=driver_air_bag,passanger_air_bag=passanger_air_bag,rear_seat_air_bag=rear_seat_air_bag,curtain_air_bag=curtain_air_bag,power_door_lock=power_door_lock,traction_control=traction_control,oil_brakes=oil_brakes,air_brakes=air_brakes,tool_kit=tool_kit,stepney_tyre=stepney_tyre,foot_parking_brake=foot_parking_brake,adaptive_cruise_control=adaptive_cruise_control,blind_spot_monitoring=blind_spot_monitoring,lane_keep_assist=lane_keep_assist,lane_departure_warning=lane_departure_warning,degree_360_camera=degree_360_camera,front_rear_parking_sensors=front_rear_parking_sensors,automatic_emergency_braking=automatic_emergency_braking,pedestrian_detection=pedestrian_detection,cross_traffic_alert_rear=cross_traffic_alert_rear,driver_attention_warning=driver_attention_warning,night_vision_assist=night_vision_assist,tire_pressure_monitoring_system=tire_pressure_monitoring_system,collision_mitigation_system=collision_mitigation_system,isofix_child_seat_mounts=isofix_child_seat_mounts,adaptive_lighting=adaptive_lighting,performance_kit_tuned=performance_kit_tuned,parking_button=parking_button,manual_handbrake=manual_handbrake,electronic_parking_brake_auto_hold=electronic_parking_brake_auto_hold)
 
         for key, value in safety_data.model_dump(exclude_unset=True).items():
             setattr(check_safety, key, value)
@@ -2056,9 +2377,162 @@ def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = F
             else:
                 raise HTTPException(status_code=400, detail="Invalid boolean value for sun_visor")
 
+            
+        if matrix_led_laser_headlights is not None:
+            if matrix_led_laser_headlights.lower() in ["true", "1"]:
+                matrix_led_laser_headlights = True
+            elif matrix_led_laser_headlights.lower() in ["false", "0"]:
+                matrix_led_laser_headlights = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for matrix_led_laser_headlights")
+            
+        if automatic_headlight_on_off is not None:
+            if automatic_headlight_on_off.lower() in ["true", "1"]:
+                automatic_headlight_on_off = True
+            elif automatic_headlight_on_off.lower() in ["false", "0"]:
+                automatic_headlight_on_off = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for automatic_headlight_on_off")
+            
+        if power_tailgate is not None:
+            if power_tailgate.lower() in ["true", "1"]:
+                power_tailgate = True
+            elif power_tailgate.lower() in ["false", "0"]:
+                power_tailgate = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for power_tailgate")
+
+        if roof_rails_roof_rack is not None:
+            if roof_rails_roof_rack.lower() in ["true", "1"]:
+                roof_rails_roof_rack = True
+            elif roof_rails_roof_rack.lower() in ["false", "0"]:
+                roof_rails_roof_rack = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for roof_rails_roof_rack")
+
+        if dual_exhaust_pipes is not None:
+            if dual_exhaust_pipes.lower() in ["true", "1"]:
+                dual_exhaust_pipes = True
+            elif dual_exhaust_pipes.lower() in ["false", "0"]:
+                dual_exhaust_pipes = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for dual_exhaust_pipes")
+            
+        if sport_exhaust is not None:
+            if sport_exhaust.lower() in ["true", "1"]:
+                sport_exhaust = True
+            elif sport_exhaust.lower() in ["false", "0"]:
+                sport_exhaust = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for sport_exhaust")
+
+        if rear_spoiler is not None:
+            if rear_spoiler.lower() in ["true", "1"]:
+                rear_spoiler = True
+            elif rear_spoiler.lower() in ["false", "0"]:
+                rear_spoiler = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rear_spoiler")
+            
+        if led_dlrs_daytime_running_lights is not None:
+            if led_dlrs_daytime_running_lights.lower() in ["true", "1"]:
+                led_dlrs_daytime_running_lights = True
+            elif led_dlrs_daytime_running_lights.lower() in ["false", "0"]:
+                led_dlrs_daytime_running_lights = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for led_dlrs_daytime_running_lights")
+            
+        if auto_folding_side_mirrors is not None:
+            if auto_folding_side_mirrors.lower() in ["true", "1"]:
+                auto_folding_side_mirrors = True
+            elif auto_folding_side_mirrors.lower() in ["false", "0"]:
+                auto_folding_side_mirrors = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for auto_folding_side_mirrors")
+
+        if frameless_doors is not None:
+            if frameless_doors.lower() in ["true", "1"]:
+                frameless_doors = True
+            elif frameless_doors.lower() in ["false", "0"]:
+                frameless_doors = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for frameless_doors")
+
+        if charging_port is not None:
+            if charging_port.lower() in ["true", "1"]:
+                charging_port = True
+            elif charging_port.lower() in ["false", "0"]:
+                charging_port = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for charging_port")
+            
+        if soft_close_doors is not None:
+            if soft_close_doors.lower() in ["true", "1"]:
+                soft_close_doors = True
+            elif soft_close_doors.lower() in ["false", "0"]:
+                soft_close_doors = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for soft_close_doors")
+
+        if illuminated_logo_welcome_lights is not None:
+            if illuminated_logo_welcome_lights.lower() in ["true", "1"]:
+                illuminated_logo_welcome_lights = True
+            elif illuminated_logo_welcome_lights.lower() in ["false", "0"]:
+                illuminated_logo_welcome_lights = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for illuminated_logo_welcome_lights")
+            
+        if rain_sensing_wipers is not None:
+            if rain_sensing_wipers.lower() in ["true", "1"]:
+                rain_sensing_wipers = True
+            elif rain_sensing_wipers.lower() in ["false", "0"]:
+                rain_sensing_wipers = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rain_sensing_wipers")
+            
+        if Performance_tyres is not None:
+            if Performance_tyres.lower() in ["true", "1"]:
+                Performance_tyres = True
+            elif Performance_tyres.lower() in ["false", "0"]:
+                Performance_tyres = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for Performance_tyres")
+            
+        if side_mirrors_indicators is not None:
+            if side_mirrors_indicators.lower() in ["true", "1"]:
+                side_mirrors_indicators = True
+            elif side_mirrors_indicators.lower() in ["false", "0"]:
+                side_mirrors_indicators = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for side_mirrors_indicators")
+            
+        if sports_suspension is not None:
+            if sports_suspension.lower() in ["true", "1"]:
+                sports_suspension = True
+            elif sports_suspension.lower() in ["false", "0"]:
+                sports_suspension = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for sports_suspension")
+
+        if premium_paint is not None:
+            if premium_paint.lower() in ["true", "1"]:
+                premium_paint = True
+            elif premium_paint.lower() in ["false", "0"]:
+                premium_paint = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for premium_paint")
+
+        if air_deflector is not None:
+            if air_deflector.lower() in ["true", "1"]:
+                air_deflector = True
+            elif air_deflector.lower() in ["false", "0"]:
+                air_deflector = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for air_deflector")
+
         # All data converted to boolean now storing the data in the table
         check_extr = db.query(VehicleExterior).filter(VehicleExterior.fk_vehicle_id == vehicle_id).first()
-        exterior_data = VehExterior(fog_lights_front=fog_lights_front,alloy_rims=alloy_rims,high_deck=high_deck,electric_pump=electric_pump,justlow=justlow,crane_step=crane_step,HID_headlights=HID_headlights,rear_wiper=rear_wiper,sun_visor=sun_visor)
+        exterior_data = VehExterior(fog_lights_front=fog_lights_front,alloy_rims=alloy_rims,high_deck=high_deck,electric_pump=electric_pump,justlow=justlow,crane_step=crane_step,HID_headlights=HID_headlights,rear_wiper=rear_wiper,sun_visor=sun_visor,matrix_led_laser_headlights=matrix_led_laser_headlights,automatic_headlight_on_off=automatic_headlight_on_off,power_tailgate=power_tailgate,roof_rails_roof_rack=roof_rails_roof_rack,dual_exhaust_pipes=dual_exhaust_pipes,sport_exhaust=sport_exhaust,rear_spoiler=rear_spoiler,led_dlrs_daytime_running_lights=led_dlrs_daytime_running_lights,auto_folding_side_mirrors=auto_folding_side_mirrors,frameless_doors=frameless_doors,charging_port=charging_port,soft_close_doors=soft_close_doors,illuminated_logo_welcome_lights=illuminated_logo_welcome_lights,rain_sensing_wipers=rain_sensing_wipers,Performance_tyres=Performance_tyres,side_mirrors_indicators=side_mirrors_indicators,sports_suspension=sports_suspension,premium_paint=premium_paint,air_deflector=air_deflector)
 
         for key, value in exterior_data.model_dump(exclude_unset=True).items():
             setattr(check_extr, key, value)
@@ -2203,10 +2677,204 @@ def vehicles(vehicle_id: int, fk_bl_number: str = Form(None), body_type: str = F
                 dashboard_speakers = False
             else:
                 raise HTTPException(status_code=400, detail="Invalid boolean value for dashboard_speakers")            
-        
+
+
+        if wireless_apple_carplay_android_auto is not None:
+            if wireless_apple_carplay_android_auto.lower() in ["true", "1"]:
+                wireless_apple_carplay_android_auto = True
+            elif wireless_apple_carplay_android_auto.lower() in ["false", "0"]:
+                wireless_apple_carplay_android_auto = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for wireless_apple_carplay_android_auto") 
+
+        if voice_control_system is not None:
+            if voice_control_system.lower() in ["true", "1"]:
+                voice_control_system = True
+            elif voice_control_system.lower() in ["false", "0"]:
+                voice_control_system = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for voice_control_system") 
+
+        if gesture_control is not None:
+            if gesture_control.lower() in ["true", "1"]:
+                gesture_control = True
+            elif gesture_control.lower() in ["false", "0"]:
+                gesture_control = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for gesture_control") 
+
+        if remote_engine_start is not None:
+            if remote_engine_start.lower() in ["true", "1"]:
+                remote_engine_start = True
+            elif remote_engine_start.lower() in ["false", "0"]:
+                remote_engine_start = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for remote_engine_start") 
+
+        if auto_dimming_rearview_mirror is not None:
+            if auto_dimming_rearview_mirror.lower() in ["true", "1"]:
+                auto_dimming_rearview_mirror = True
+            elif auto_dimming_rearview_mirror.lower() in ["false", "0"]:
+                auto_dimming_rearview_mirror = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for auto_dimming_rearview_mirror") 
+
+        if driver_seat_massager is not None:
+            if driver_seat_massager.lower() in ["true", "1"]:
+                driver_seat_massager = True
+            elif driver_seat_massager.lower() in ["false", "0"]:
+                driver_seat_massager = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for driver_seat_massager") 
+
+        if rear_window_sunshade_manual is not None:
+            if rear_window_sunshade_manual.lower() in ["true", "1"]:
+                rear_window_sunshade_manual = True
+            elif rear_window_sunshade_manual.lower() in ["false", "0"]:
+                rear_window_sunshade_manual = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rear_window_sunshade_manual") 
+
+        if rear_window_sunshade_electric is not None:
+            if rear_window_sunshade_electric.lower() in ["true", "1"]:
+                rear_window_sunshade_electric = True
+            elif rear_window_sunshade_electric.lower() in ["false", "0"]:
+                rear_window_sunshade_electric = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rear_window_sunshade_electric") 
+
+        if air_purifier_ionizer is not None:
+            if air_purifier_ionizer.lower() in ["true", "1"]:
+                air_purifier_ionizer = True
+            elif air_purifier_ionizer.lower() in ["false", "0"]:
+                air_purifier_ionizer = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for air_purifier_ionizer") 
+
+        if cabin_noise_cancellation is not None:
+            if cabin_noise_cancellation.lower() in ["true", "1"]:
+                cabin_noise_cancellation = True
+            elif cabin_noise_cancellation.lower() in ["false", "0"]:
+                cabin_noise_cancellation = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for cabin_noise_cancellation") 
+
+        if smart_climate_control_ai_sensing is not None:
+            if smart_climate_control_ai_sensing.lower() in ["true", "1"]:
+                smart_climate_control_ai_sensing = True
+            elif smart_climate_control_ai_sensing.lower() in ["false", "0"]:
+                smart_climate_control_ai_sensing = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for smart_climate_control_ai_sensing") 
+
+        if ota_updates_over_the_air_software is not None:
+            if ota_updates_over_the_air_software.lower() in ["true", "1"]:
+                ota_updates_over_the_air_software = True
+            elif ota_updates_over_the_air_software.lower() in ["false", "0"]:
+                ota_updates_over_the_air_software = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for ota_updates_over_the_air_software") 
+
+        if sports_drive_mode is not None:
+            if sports_drive_mode.lower() in ["true", "1"]:
+                sports_drive_mode = True
+            elif sports_drive_mode.lower() in ["false", "0"]:
+                sports_drive_mode = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for sports_drive_mode") 
+
+        if comfort_drive_mode is not None:
+            if comfort_drive_mode.lower() in ["true", "1"]:
+                comfort_drive_mode = True
+            elif comfort_drive_mode.lower() in ["false", "0"]:
+                comfort_drive_mode = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for comfort_drive_mode") 
+
+        if snow_drive_mode is not None:
+            if snow_drive_mode.lower() in ["true", "1"]:
+                snow_drive_mode = True
+            elif snow_drive_mode.lower() in ["false", "0"]:
+                snow_drive_mode = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for snow_drive_mode") 
+
+        if intelligent_parking_assist_auto_park is not None:
+            if intelligent_parking_assist_auto_park.lower() in ["true", "1"]:
+                intelligent_parking_assist_auto_park = True
+            elif intelligent_parking_assist_auto_park.lower() in ["false", "0"]:
+                intelligent_parking_assist_auto_park = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for intelligent_parking_assist_auto_park") 
+
+        if digital_key_smartphone is not None:
+            if digital_key_smartphone.lower() in ["true", "1"]:
+                digital_key_smartphone = True
+            elif digital_key_smartphone.lower() in ["false", "0"]:
+                digital_key_smartphone = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for digital_key_smartphone") 
+
+        if electric_rear_seat_recline is not None:
+            if electric_rear_seat_recline.lower() in ["true", "1"]:
+                electric_rear_seat_recline = True
+            elif electric_rear_seat_recline.lower() in ["false", "0"]:
+                electric_rear_seat_recline = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for electric_rear_seat_recline") 
+
+        if navigation_system is not None:
+            if navigation_system.lower() in ["true", "1"]:
+                navigation_system = True
+            elif navigation_system.lower() in ["false", "0"]:
+                navigation_system = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for navigation_system") 
+
+        if power_locks is not None:
+            if power_locks.lower() in ["true", "1"]:
+                power_locks = True
+            elif power_locks.lower() in ["false", "0"]:
+                power_locks = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for power_locks") 
+
+        if tinted_windows is not None:
+            if tinted_windows.lower() in ["true", "1"]:
+                tinted_windows = True
+            elif tinted_windows.lower() in ["false", "0"]:
+                tinted_windows = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for tinted_windows") 
+
+        if rear_tv_screens is not None:
+            if rear_tv_screens.lower() in ["true", "1"]:
+                rear_tv_screens = True
+            elif rear_tv_screens.lower() in ["false", "0"]:
+                rear_tv_screens = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for rear_tv_screens") 
+
+        if cd_dvd_player is not None:
+            if cd_dvd_player.lower() in ["true", "1"]:
+                cd_dvd_player = True
+            elif cd_dvd_player.lower() in ["false", "0"]:
+                cd_dvd_player = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for cd_dvd_player") 
+
+        if mp3_interface is not None:
+            if mp3_interface.lower() in ["true", "1"]:
+                mp3_interface = True
+            elif mp3_interface.lower() in ["false", "0"]:
+                mp3_interface = False
+            else:
+                raise HTTPException(status_code=400, detail="Invalid boolean value for dashboard_speakers")            
+
+
         # All data converted to boolean now storing the data in the table
         check_cmft = db.query(VehicleComfortConvenience).filter(VehicleComfortConvenience.fk_vehicle_id == vehicle_id).first()
-        comfort_data = ComfortConvenience(power_streeing=power_streeing,push_start_smartkey=push_start_smartkey,keyless_entry=keyless_entry,key_start=key_start,navigation=navigation,remote_controller=remote_controller,android_led=android_led,bluetooth=bluetooth,front_door_speaker=front_door_speaker,rear_door_speaker=rear_door_speaker,rear_deck_speaker=rear_deck_speaker,ECO_mode=ECO_mode,heated_seats=heated_seats, power_seats=power_seats, power_side_mirrors=power_side_mirrors, electric_rearview_mirror=electric_rearview_mirror,dashboard_speakers=dashboard_speakers)
+        comfort_data = ComfortConvenience(power_streeing=power_streeing,push_start_smartkey=push_start_smartkey,keyless_entry=keyless_entry,key_start=key_start,navigation=navigation,remote_controller=remote_controller,android_led=android_led,bluetooth=bluetooth,front_door_speaker=front_door_speaker,rear_door_speaker=rear_door_speaker,rear_deck_speaker=rear_deck_speaker,ECO_mode=ECO_mode,heated_seats=heated_seats, power_seats=power_seats, power_side_mirrors=power_side_mirrors, electric_rearview_mirror=electric_rearview_mirror,dashboard_speakers=dashboard_speakers,wireless_apple_carplay_android_auto=wireless_apple_carplay_android_auto,voice_control_system=voice_control_system,gesture_control=gesture_control,remote_engine_start=remote_engine_start,auto_dimming_rearview_mirror=auto_dimming_rearview_mirror,driver_seat_massager=driver_seat_massager,rear_window_sunshade_manual=rear_window_sunshade_manual,rear_window_sunshade_electric=rear_window_sunshade_electric,air_purifier_ionizer=air_purifier_ionizer,cabin_noise_cancellation=cabin_noise_cancellation,smart_climate_control_ai_sensing=smart_climate_control_ai_sensing,ota_updates_over_the_air_software=ota_updates_over_the_air_software,sports_drive_mode=sports_drive_mode,comfort_drive_mode=comfort_drive_mode,snow_drive_mode=snow_drive_mode,intelligent_parking_assist_auto_park=intelligent_parking_assist_auto_park,digital_key_smartphone=digital_key_smartphone,electric_rear_seat_recline=electric_rear_seat_recline,navigation_system=navigation_system,power_locks=power_locks,tinted_windows=tinted_windows,rear_tv_screens=rear_tv_screens,cd_dvd_player=cd_dvd_player,mp3_interface=mp3_interface)
 
         for key, value in comfort_data.model_dump(exclude_unset=True).items():
             setattr(check_cmft, key, value)
