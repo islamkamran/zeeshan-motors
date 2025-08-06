@@ -3594,7 +3594,8 @@ def get_chassis_details(data: ChassisDetail, db: Session = Depends(get_db)):
             "make": chassis_detail.make,
             "model": chassis_detail.model,
             "year": chassis_detail.year,
-            "color": chassis_detail.color,
+            "intcolor": chassis_detail.intcolor,
+            "extcolor": chassis_detail.extcolor,
             "created_at": chassis_detail.created_at,
             "updated_at": chassis_detail.updated_at
         }
