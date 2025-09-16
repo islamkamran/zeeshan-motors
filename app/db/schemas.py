@@ -722,6 +722,11 @@ class MonthInput(BaseModel):
     month: str  # Example: "June"
     year: int   # Example: 2024
 
+class YearInput(BaseModel):
+    category: str  # Example: "June"
+    year: int   # Example: 2024
+
+
 class InvoiceData(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
