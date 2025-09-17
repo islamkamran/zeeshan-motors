@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
-from app.api import db_testing, vehicles, vehicle_by_id, display_all_vehicles,vehicle_price, containers, customers,roles_crud, invoice, search_inventory, feedback
+from app.api import db_testing, vehicles, vehicle_by_id, display_all_vehicles,vehicle_price, containers, customers,roles_crud, invoice, search_inventory, feedback, count_users,profit_loss,sold_item_count,vehicle_inventry_report
 from app.api.users import signup, signin
 from app.api.cms import zeeshan_cms
 # from app.api.refresh_token import refresh_token
@@ -94,6 +94,12 @@ app.include_router(roles_crud.router)
 app.include_router(invoice.router)
 app.include_router(feedback.router)
 app.include_router(search_inventory.router)
+app.include_router(feedback.router)
+app.include_router(invoice.router)
+app.include_router(profit_loss.router)
+app.include_router(sold_item_count.router)
+app.include_router(vehicle_inventry_report.router)
+app.include_router(count_users.router)
 
 
 
