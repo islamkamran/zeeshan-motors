@@ -5,7 +5,7 @@ from app.db.schemas import User, Signin,MonthInput, YearInput
 from sqlalchemy.orm import Session
 from app.db.db_setup import get_db
 from app.helper.jwt_token import jwt_access_token
-from app.db.models import Vehicle
+from app.db.models import Vehicle, VehicleSale, StatusHistory
 from datetime import datetime
 from sqlalchemy import func, and_
 import json

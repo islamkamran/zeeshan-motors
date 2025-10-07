@@ -175,7 +175,33 @@ class Vehicle(TimestampMixin, Base):
     uploaded_by = Column(String(55), nullable=True)
     motor = Column(String(55), nullable=True)
 
-    
+class Bid(TimestampMixin, Base):
+    __tablename__ = "bids"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_auction_id = Column(Integer, ForeignKey("auctions.id"), index=True, nullable=False)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
+    amount = Column(Integer, nullable=False)
+    is_automated = Column(String(55), nullable=True) # if this donot work change the default to nullable = True
+    status = Column(String(20), nullable=True)
+
+class VehicleSale(TimestampMixin, Base):
+    __tablename__ = "vehicle_sales"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    fk_user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=False)
+    fk_bid_id = Column(Integer, ForeignKey("bids.id"), index=True, nullable=True)
+    sold_date = Column(String(55), nullable=True)
+    sold_price = Column(Float, nullable=True)
+
+
+class StatusHistory(TimestampMixin, Base):
+    __tablename__ = "status_history"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    item_id = Column(Integer, nullable=False)  # ID of the vehicle or spare part
+    item_type = Column(Enum('vehicle', 'sparepart', name='item_type_enum'), nullable=False)
+    status = Column(String(55), nullable=True)
+    fk_vehicle_id = Column(Integer, ForeignKey("vehicles.id"), index=True, nullable=True)
 
 class VehicleInterior(TimestampMixin, Base):
     __tablename__ = "interior"

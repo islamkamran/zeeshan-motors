@@ -16,6 +16,11 @@ class User(BaseModel):
     class Config:
         orm_mode = True 
 
+class DeleteBid(BaseModel):
+    chassis_no: Optional[str] = None
+    part_id: Optional[str] = None
+
+
 class FeedbackCreate(BaseModel):
     rating: int
     comment: str
