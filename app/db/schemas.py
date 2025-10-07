@@ -20,7 +20,9 @@ class DeleteBid(BaseModel):
     chassis_no: Optional[str] = None
     part_id: Optional[str] = None
 
-
+class BLRequest(BaseModel):
+    bl_numbers: List[str]
+    
 class FeedbackCreate(BaseModel):
     rating: int
     comment: str

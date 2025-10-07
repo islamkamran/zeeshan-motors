@@ -374,28 +374,35 @@ THIRD_PARTY_API_URL = "https://tracking.searates.com/tracking"
 API_KEY = "K-7484622E-03C9-4C55-BC01-BEAF2E9271DB"
 
 
-@router.get("/v1/get-container-tracking")
-async def get_container_tracking(db: Session = Depends(get_db)):
+@router.post("/v1/search-container-tracking")
+async def get_container_tracking(bl_request: BLRequest, db: Session = Depends(get_db)):
+    """
+    Receive BL numbers and fetch tracking data from external API
+    """
     
-    """************logic for the get API****************"""
-    bl_num = db.query(Container.bl_number).filter(Container.status == 'upcoming').all()
-    bl_num_values = [item[0] for item in bl_num if item[0] not in (None, '')]
-    print(bl_num_values)
-    bl_num_values = ["TYO0641826","TYO0645144"]
-    print(bl_num_values)
-    """************logic for the get API****************"""
-
+    # Use the BL numbers from the request
+    bl_num_values = bl_request.bl_numbers
+    
+    # Validate that we have at least one BL number
+    if not bl_num_values:
+        return {"error": "At least one BL number is required"}
+    
+    print(f"Processing BL numbers: {bl_num_values}")
+    
     results = []
-
     headers = {
-        "Content-Type": "application/json",  # Explicitly specify JSON content type
+        "Content-Type": "application/json",
     }
 
     for bl_number in bl_num_values:
+        # Skip empty BL numbers
+        if not bl_number or bl_number.strip() == "":
+            continue
+            
         # Prepare request parameters
         params = {
             "api_key": API_KEY,
-            "number": bl_number,
+            "number": bl_number.strip(),
             "type": "BL",  # Since it's a Bill of Lading
             "sealine": "auto",  # Optional, auto-detect the shipping line
         }
@@ -413,17 +420,32 @@ async def get_container_tracking(db: Session = Depends(get_db)):
                 "bl_number": bl_number,
                 "error": str(e)
             })
+    
+    # Extract and format the response data
     extracted_data = []
     for result in results:
-        data = result.get("data", {}).get("data", {})
-        metadata = data.get("metadata", {})
-        locations = data.get("locations", [])
-        extracted_data.append({
-            "metadata": metadata,
-            "locations": locations
-        })
+        # If there was an error, include it in the response
+        if "error" in result:
+            extracted_data.append({
+                "bl_number": result["bl_number"],
+                "error": result["error"],
+                "metadata": {},
+                "locations": []
+            })
+        else:
+            data = result.get("data", {}).get("data", {})
+            metadata = data.get("metadata", {})
+            locations = data.get("locations", [])
+            extracted_data.append({
+                "bl_number": result["bl_number"],
+                "metadata": metadata,
+                "locations": locations
+            })
     
-    return {"data": extracted_data}
+    return {
+        "message": f"Processed {len(extracted_data)} BL numbers",
+        "data": extracted_data
+    }
 
 
 """****************Google Reviews****************"""
