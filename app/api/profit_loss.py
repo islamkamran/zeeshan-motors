@@ -1,26 +1,17 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.db.crud import get_user_by_credentials
 from app.helper.authenticate_user import autheticate_user
-from app.db.schemas import User, Signin,MonthInput
+from app.db.schemas import MonthInput
 from sqlalchemy.orm import Session
 from app.db.db_setup import get_db
 from app.helper.jwt_token import jwt_access_token
 from app.db.models import Vehicle
+import logging
 from datetime import datetime
 from sqlalchemy import func, and_
 from sqlalchemy.sql import case
 
 router = APIRouter()
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-from sqlalchemy import func, and_
-from datetime import datetime
-from app.db.db_setup import get_db
-from app.db.models import Vehicle
-
-router = APIRouter()
-
 
 @router.post("/v1/profit_loss_by_month")
 def report_sales_revenue_by_month(input_data: MonthInput, db: Session = Depends(get_db)):
@@ -49,7 +40,7 @@ def report_sales_revenue_by_month(input_data: MonthInput, db: Session = Depends(
             func.sum(func.coalesce(Vehicle.balance_amount, 0)).label("hold_revenue"),
             func.sum(
                 case(
-                    [(Vehicle.status == "Instock", func.coalesce(Vehicle.total_price, 0))],
+                    (Vehicle.status == "Instock", func.coalesce(Vehicle.total_price, 0)),
                     else_=0
                 )
             ).label("total_live_inventory_vehicle")
@@ -73,9 +64,9 @@ def report_sales_revenue_by_month(input_data: MonthInput, db: Session = Depends(
 
 # *********************overall**************************
         revenue_combine = vehicle_total_revenue 
-        onhold_combine = vehicle_total_hold_revenue 
+        onhold_combine = vehicle_total_hold_revenue
         profit_combine = veh_profit
-        loss_combine = veh_loss
+        loss_combine = veh_loss 
         combine_live_inventory_worth = vehicle_total_live_inventory
         
         revenue_combine = float(revenue_combine)
@@ -96,8 +87,6 @@ def report_sales_revenue_by_month(input_data: MonthInput, db: Session = Depends(
             "combine_live_inventory_worth": combine_live_inventory_worth
         }
         return {"data": retval}
-
-    except HTTPException as e:
-        raise e
     except Exception as e:
+        logging.error(f"Error calculating profit/loss: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
